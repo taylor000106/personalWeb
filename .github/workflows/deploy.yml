@@ -2,7 +2,7 @@ name: Deploy to VPS
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   deploy:
@@ -23,15 +23,9 @@ jobs:
           ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
             set -e
             cd /root/personalWeb
-
-            # Pull latest code
-            git pull origin main
-
-            # Rebuild and restart
+            git fetch origin
+            git reset --hard origin/master
             docker compose up --build -d
-
-            # Clean up old images
             docker image prune -f
-
             echo 'Deploy complete!'
           "
