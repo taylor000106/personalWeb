@@ -32,15 +32,22 @@ jobs:
           ssh -o BatchMode=yes -o ConnectTimeout=30 "${VPS_USER}@${VPS_HOST}" bash -s <<'EOF'
           set -euo pipefail
           cd /root/personalWeb
+          echo "==> disk before cleanup"
+          df -h /
+          echo "==> free docker disk before build"
+          docker container prune -f || true
+          docker image prune -af || true
+          docker builder prune -af || true
+          df -h /
           echo "==> git sync"
           git fetch origin
           git reset --hard origin/master
           git --no-pager log -1 --oneline
           echo "==> docker compose build/up"
-          export NODE_OPTIONS=--max-old-space-size=2048
+          export NODE_OPTIONS=--max-old-space-size=1536
           if ! docker compose up --build -d; then
-            echo "==> docker compose failed; recent logs:"
-            docker compose logs --tail=120 || true
+            echo "==> docker compose failed; diagnostics:"
+            docker compose logs --tail=80 || true
             docker compose ps || true
             free -h || true
             df -h || true
@@ -48,5 +55,6 @@ jobs:
           fi
           docker image prune -f
           docker compose ps
+          df -h /
           echo "Deploy complete!"
           EOF
