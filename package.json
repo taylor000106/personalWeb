@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "analyze": "node scripts/analyze.mjs",
     "lighthouse": "node scripts/lighthouse-hint.mjs",
-    "prepare": "husky",
+    "prepare": "node -e \"try{require('child_process').execSync('husky',{stdio:'inherit'})}catch(e){}\"",
     "db:init": "node scripts/init-db.mjs",
     "hash-password": "node scripts/hash-password.mjs"
   },
