@@ -1,9 +1,4 @@
 import type { NextConfig } from "next";
-import bundleAnalyzer from "@next/bundle-analyzer";
-
-const withBundleAnalyzer = bundleAnalyzer({
-  enabled: process.env.ANALYZE === "1",
-});
 
 const nextConfig: NextConfig = {
   output: "standalone",
@@ -39,4 +34,12 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default withBundleAnalyzer(nextConfig);
+async function loadConfig() {
+  if (process.env.ANALYZE !== "1") {
+    return nextConfig;
+  }
+  const bundleAnalyzer = (await import("@next/bundle-analyzer")).default;
+  return bundleAnalyzer({ enabled: true })(nextConfig);
+}
+
+export default loadConfig();

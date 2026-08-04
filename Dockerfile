@@ -9,6 +9,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# Small VPS builds often OOM without a higher heap limit
+ENV NODE_OPTIONS=--max-old-space-size=2048
 RUN npm run build
 
 FROM node:20-bookworm-slim AS runner

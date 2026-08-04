@@ -19,18 +19,34 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
+          printf '%s\n' "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
 
       - name: Deploy to VPS
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
         run: |
-          ssh ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "
-            set -e
-            cd /root/personalWeb
-            git fetch origin
-            git reset --hard origin/master
-            docker compose up --build -d
-            docker image prune -f
-            echo 'Deploy complete!'
-          "
+          set -euo pipefail
+          ssh -o BatchMode=yes -o ConnectTimeout=30 "${VPS_USER}@${VPS_HOST}" bash -s <<'EOF'
+          set -euo pipefail
+          cd /root/personalWeb
+          echo "==> git sync"
+          git fetch origin
+          git reset --hard origin/master
+          git --no-pager log -1 --oneline
+          echo "==> docker compose build/up"
+          export NODE_OPTIONS=--max-old-space-size=2048
+          if ! docker compose up --build -d; then
+            echo "==> docker compose failed; recent logs:"
+            docker compose logs --tail=120 || true
+            docker compose ps || true
+            free -h || true
+            df -h || true
+            exit 1
+          fi
+          docker image prune -f
+          docker compose ps
+          echo "Deploy complete!"
+          EOF
