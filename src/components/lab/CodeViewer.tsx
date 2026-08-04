@@ -29,10 +29,9 @@ export function CodeViewer({ src }: { src: string }) {
   }, [load]);
 
   const lines = code ? code.split("\n").length : 0;
-  const preview =
-    code ?
-      expanded ?
-        code
+  const preview = code
+    ? expanded
+      ? code
       : code.split("\n").slice(0, 48).join("\n") + (lines > 48 ? "\n…" : "")
     : "";
 

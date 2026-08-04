@@ -93,7 +93,10 @@ export function NotesManager() {
           onChange={(e) => setTags(e.target.value)}
         />
         <div className="flex gap-2">
-          <button type="submit" className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white">
+          <button
+            type="submit"
+            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
+          >
             {editingId ? "保存" : "添加"}
           </button>
           {editingId ? (
@@ -122,10 +125,18 @@ export function NotesManager() {
               <div className="flex items-start justify-between gap-2">
                 <h3 className="font-semibold">{note.title}</h3>
                 <div className="flex shrink-0 gap-2 text-xs">
-                  <button type="button" className="text-violet-600" onClick={() => startEdit(note)}>
+                  <button
+                    type="button"
+                    className="text-violet-600"
+                    onClick={() => startEdit(note)}
+                  >
                     编辑
                   </button>
-                  <button type="button" className="text-red-600" onClick={() => remove(note.id)}>
+                  <button
+                    type="button"
+                    className="text-red-600"
+                    onClick={() => remove(note.id)}
+                  >
                     删除
                   </button>
                 </div>
@@ -134,7 +145,9 @@ export function NotesManager() {
                 <p className="mt-1 text-xs text-zinc-500">{note.tags}</p>
               ) : null}
               {note.content ? (
-                <p className="mt-2 whitespace-pre-wrap text-sm text-zinc-700">{note.content}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm text-zinc-700">
+                  {note.content}
+                </p>
               ) : null}
               <p className="mt-2 text-xs text-zinc-400">
                 更新于 {new Date(note.updated_at).toLocaleString("zh-CN")}

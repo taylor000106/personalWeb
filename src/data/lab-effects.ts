@@ -1,26 +1,49 @@
+export type LabCategory = "animation" | "performance" | "ai" | "browser";
+
 export type LabEffect = {
   slug: string;
   title: string;
   subtitle: string;
+  category: LabCategory;
   tags: string[];
   demoPath: string;
   previewBg: string;
-  source: {
+  /** Community-inspired pieces should set source; omit for original lab work */
+  source?: {
     name: string;
     url: string;
   };
   publishedAt: string;
   summary: string;
+  /** Short tech bullets shown on detail page */
+  techPoints?: string[];
   analysis: { heading: string; body: string }[];
   useCases: string[];
   techStack: string[];
-  /** 详情页需鼠标/键盘/滚动操作 */
+  /** interactive demo */
   interactive?: boolean;
 };
+
+export function getLabOrigin(effect: LabEffect): "original" | "inspired" {
+  return effect.source ? "inspired" : "original";
+}
+
+export const labCategories: {
+  id: LabCategory | "all";
+  label: string;
+  description: string;
+}[] = [
+  { id: "all", label: "All", description: "Animation / Performance / AI / Browser" },
+  { id: "animation", label: "Animation", description: "Canvas / CSS / Motion" },
+  { id: "performance", label: "Performance", description: "Virtual list / render" },
+  { id: "ai", label: "AI", description: "SSE / streaming Markdown" },
+  { id: "browser", label: "Browser", description: "Web API / Storage / Worker" },
+];
 
 export const labEffects: LabEffect[] = [
   {
     slug: "interactive-rocket",
+    category: "animation",
     title: "火箭 Loading",
     subtitle: "纯 CSS 太空火箭 · 悬停转向 · 按住加速",
     interactive: true,
@@ -49,6 +72,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "strings-code-cloth",
+    category: "animation",
     title: "代码窗帘",
     subtitle: "可拖拽的字符串物理窗帘",
     interactive: true,
@@ -77,6 +101,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "periodic-table-3d",
+    category: "animation",
     title: "元素周期表",
     subtitle: "Anime.js 驱动的 3D 布局切换",
     interactive: true,
@@ -105,6 +130,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "ai-billiards",
+    category: "animation",
     title: "和 AI 打台球",
     subtitle: "Canvas + Matter.js 物理引擎",
     interactive: true,
@@ -133,6 +159,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "shy-bird-3d",
+    category: "animation",
     title: "害羞鸡",
     subtitle: "Three.js + GSAP 3D 互动小鸟",
     interactive: true,
@@ -161,6 +188,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "day-night-fox",
+    category: "animation",
     title: "一只狐狸",
     subtitle: "纯 CSS 日夜切换 · 会害羞的狐狸",
     interactive: true,
@@ -189,6 +217,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "ascii-ripple",
+    category: "animation",
     title: "ASCII 文字波纹",
     subtitle: "悬停链接触发字符涟漪",
     interactive: true,
@@ -217,6 +246,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "error-face-404",
+    category: "animation",
     title: "404 错误脸",
     subtitle: "SVG 描边动画拼出表情",
     tags: ["SVG", "CSS", "404"],
@@ -244,6 +274,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "cat-select",
+    category: "animation",
     title: "猫选择器",
     subtitle: "SVG 下拉框 · 悬停逗猫",
     interactive: true,
@@ -272,6 +303,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "hobbiton-hero",
+    category: "animation",
     title: "哈比村卷轴",
     subtitle: "GSAP ScrollTrigger 电影感首屏",
     interactive: true,
@@ -300,6 +332,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "pixel-puzzle",
+    category: "animation",
     title: "像素风解谜",
     subtitle: "HTML5 Canvas 推箱子式关卡",
     interactive: true,
@@ -328,6 +361,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "css-3d-voxel-chicken",
+    category: "animation",
     title: "一只小鸡",
     subtitle: "纯 CSS 3D 体素动画",
     tags: ["CSS", "3D", "Animation", "无 JS"],
@@ -359,6 +393,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "3d-glowing-bell",
+    category: "animation",
     title: "3D 发光铃铛",
     subtitle: "纯 CSS 可开关发光铃铛 · 点击切换",
     interactive: true,
@@ -387,6 +422,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "interactive-character-heads",
+    category: "animation",
     title: "交互角色头像",
     subtitle: "CSS 卡通角色 · 按压/点击互动",
     interactive: true,
@@ -415,6 +451,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "art-cube-gallery",
+    category: "animation",
     title: "创意 3D 魔方画廊",
     subtitle: "滚动驱动的 3D 立方体 · 深色/浅色主题",
     interactive: true,
@@ -443,6 +480,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "fancy-avatar-hover",
+    category: "animation",
     title: "鼠标悬停 3D 头像",
     subtitle: "CSS 3D 透视 · 悬停立体翻转",
     interactive: true,
@@ -471,6 +509,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "play-othello",
+    category: "animation",
     title: "黑白棋",
     subtitle: "Canvas 双人对战 · 简易 AI",
     interactive: true,
@@ -499,6 +538,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "css-3d-chess",
+    category: "animation",
     title: "3D 国际象棋",
     subtitle: "纯 CSS 3D 国际象棋模型 · 自动旋转",
     tags: ["CSS", "3D", "Animation", "无 JS"],
@@ -526,6 +566,7 @@ export const labEffects: LabEffect[] = [
   },
   {
     slug: "responsive-grid-gallery",
+    category: "animation",
     title: "响应式网格画廊",
     subtitle: "CSS Grid 自适应布局 · 圆形焦点",
     tags: ["CSS", "Grid", "Responsive", "Gallery"],
@@ -551,6 +592,118 @@ export const labEffects: LabEffect[] = [
     useCases: ["摄影作品集", "电商商品展示", "博客文章配图"],
     techStack: ["HTML", "CSS Grid", "CSS", "Responsive"],
   },
+  {
+    slug: "virtual-list",
+    title: "虚拟列表",
+    subtitle: "1 万行数据只渲染可视区 · 滚动复用 DOM",
+    category: "performance",
+    interactive: true,
+    tags: ["Performance", "Virtual List", "Scroll"],
+    demoPath: "/lab/demos/virtual-list.html",
+    previewBg: "#0b1220",
+    publishedAt: "2026-08-03",
+    summary:
+      "模拟大列表场景：生成 10,000 条数据，但只渲染视口内 + overscan 的行。滚动时复用 DOM 节点，避免一次性插入数万节点导致卡顿。",
+    analysis: [
+      {
+        heading: "为什么要虚拟化",
+        body: "长列表的主要成本在 DOM 与布局，不是数据本身。只保持可视行，可以把渲染量从 O(n) 降到 O(视口)。",
+      },
+      {
+        heading: "实现要点",
+        body: "用绝对定位摆放可视行；根据 scrollTop 计算 startIndex；overscan 减少快速滚动时的白屏。",
+      },
+    ],
+    useCases: ["运营后台大表格", "聊天记录 / 日志流", "移动端长列表性能优化"],
+    techStack: ["HTML", "JavaScript", "DOM recycling"],
+    techPoints: ["可视区 + overscan 渲染", "绝对定位复用行 DOM", "scrollTop → startIndex"],
+  },
+  {
+    slug: "sse-stream",
+    title: "SSE 流式输出",
+    subtitle: "EventSource + Markdown 逐字渲染 · 可中断",
+    category: "ai",
+    interactive: true,
+    tags: ["AI", "SSE", "Streaming", "Markdown"],
+    demoPath: "/lab/demos/sse-stream.html",
+    previewBg: "#111827",
+    publishedAt: "2026-08-03",
+    summary:
+      "演示 AI 对话常用的 Server-Sent Events：前端用 EventSource 接收字节流，逐段拼接并做轻量 Markdown 渲染；支持中断。后端为 Next.js Route Handler。",
+    analysis: [
+      {
+        heading: "为什么用 SSE",
+        body: "相比 WebSocket，SSE 在「服务端 → 客户端单向流」场景更轻；HTTP 友好、重连语义清晰，适合 LLM token 流式输出。",
+      },
+      {
+        heading: "前端体验",
+        body: "流式拼接文本、粗粒度 Markdown（标题/代码块/粗体）、展示连接状态；关闭 EventSource 模拟用户点击停止。",
+      },
+    ],
+    useCases: ["AI 对话流式回答", "日志 / 构建进度推送", "知识库问答演示"],
+    techStack: ["EventSource", "SSE", "Next.js Route Handler", "Markdown"],
+    techPoints: ["EventSource 消费 SSE", "流式拼接与可中断", "轻量 Markdown 渲染"],
+  },
+  {
+    slug: "storage-playground",
+    title: "Web Storage Playground",
+    subtitle: "localStorage / sessionStorage 读写与差异",
+    category: "browser",
+    interactive: true,
+    tags: ["Web API", "Storage", "Browser"],
+    demoPath: "/lab/demos/storage-playground.html",
+    previewBg: "#0c1222",
+    publishedAt: "2026-08-04",
+    summary:
+      "对比 localStorage 与 sessionStorage 的写入、读取、清理与刷新后的持久化差异。适合讲清楚「浏览器状态放哪」这类基础工程题。",
+    techPoints: [
+      "Storage API 读写与枚举",
+      "local vs session 生命周期",
+      "配额失败时的错误处理",
+    ],
+    analysis: [
+      {
+        heading: "什么时候用哪种",
+        body: "主题、语言偏好适合 localStorage；一次性向导状态更适合 sessionStorage。敏感令牌不要明文放 Storage。",
+      },
+      {
+        heading: "工程注意点",
+        body: "setItem 可能因配额抛错；读写都要做兜底。跨标签页可用 storage 事件同步（本 Demo 聚焦单页读写）。",
+      },
+    ],
+    useCases: ["主题 / 语言偏好", "草稿与临时向导状态", "前端面试 Web API 演示"],
+    techStack: ["localStorage", "sessionStorage", "Web API"],
+  },
+  {
+    slug: "web-worker-sort",
+    title: "Web Worker Sort",
+    subtitle: "主线程卡顿 vs Worker 后台计算",
+    category: "browser",
+    interactive: true,
+    tags: ["Web API", "Worker", "Performance"],
+    demoPath: "/lab/demos/web-worker-sort.html",
+    previewBg: "#0b1020",
+    publishedAt: "2026-08-04",
+    summary:
+      "对大批量数组排序：放在主线程会卡住 Ping；放进 Worker 后 UI 仍可响应。用可感知的对比讲清「重计算离主线程」。",
+    techPoints: [
+      "Worker 创建与终止",
+      "Transferable 传 ArrayBuffer",
+      "主线程保活与卡顿对比",
+    ],
+    analysis: [
+      {
+        heading: "为什么 Worker 有用",
+        body: "JS 主线程同时负责渲染与交互。重 CPU 任务会拖垮 FPS 与点击响应；Worker 把计算移出主线程。",
+      },
+      {
+        heading: "传输细节",
+        body: "本 Demo 用 transferable 转移 Float64Array buffer，避免结构化克隆大数组的额外拷贝成本。",
+      },
+    ],
+    useCases: ["大数据预处理", "客户端加密 / 压缩", "解释长任务与卡顿成因"],
+    techStack: ["Web Worker", "ArrayBuffer", "performance.now"],
+  },
 ];
 
 export function getLabEffect(slug: string) {
@@ -559,4 +712,9 @@ export function getLabEffect(slug: string) {
 
 export function getAllLabSlugs() {
   return labEffects.map((e) => e.slug);
+}
+
+export function getLabEffectsByCategory(category: LabCategory | "all") {
+  if (category === "all") return labEffects;
+  return labEffects.filter((e) => e.category === category);
 }

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Virtual List Demo</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1220;
+        --panel: #111827;
+        --line: #1f2937;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --accent: #8b5cf6;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        height: 100vh;
+      }
+      .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px 16px;
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .stats strong {
+        color: var(--accent);
+        font-weight: 600;
+      }
+      .list {
+        position: relative;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel);
+        height: calc(100vh - 72px);
+      }
+      .phantom {
+        width: 100%;
+      }
+      .viewport {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+      }
+      .row {
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: grid;
+        grid-template-columns: 72px 1fr 88px;
+        gap: 12px;
+        align-items: center;
+        padding: 0 14px;
+        border-bottom: 1px solid #1a2332;
+        font-size: 13px;
+      }
+      .row:nth-child(odd) {
+        background: rgba(255, 255, 255, 0.02);
+      }
+      .idx {
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .tag {
+        justify-self: end;
+        font-size: 11px;
+        color: #c4b5fd;
+        border: 1px solid #4c1d95;
+        border-radius: 999px;
+        padding: 2px 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="stats">
+        <span>总行数: <strong id="total">0</strong></span>
+        <span>已挂载 DOM: <strong id="mounted">0</strong></span>
+        <span>可见区间: <strong id="range">-</strong></span>
+      </div>
+      <div class="list" id="list"></div>
+    </div>
+    <script>
+      const TOTAL = 10000;
+      const ROW_HEIGHT = 44;
+      const OVERSCAN = 8;
+      const list = document.getElementById("list");
+      const totalEl = document.getElementById("total");
+      const mountedEl = document.getElementById("mounted");
+      const rangeEl = document.getElementById("range");
+
+      totalEl.textContent = TOTAL.toLocaleString();
+
+      const data = Array.from({ length: TOTAL }, (_, i) => ({
+        id: i + 1,
+        title: "Task #" + String(i + 1).padStart(5, "0") + " · batch render item",
+        status: i % 7 === 0 ? "done" : i % 3 === 0 ? "running" : "queued",
+      }));
+
+      const phantom = document.createElement("div");
+      phantom.className = "phantom";
+      phantom.style.height = TOTAL * ROW_HEIGHT + "px";
+      list.appendChild(phantom);
+
+      const viewport = document.createElement("div");
+      viewport.className = "viewport";
+      list.appendChild(viewport);
+
+      const rowPool = [];
+
+      function ensureRows(count) {
+        while (rowPool.length < count) {
+          const row = document.createElement("div");
+          row.className = "row";
+          row.innerHTML =
+            '<span class="idx"></span><span class="title"></span><span class="tag"></span>';
+          viewport.appendChild(row);
+          rowPool.push(row);
+        }
+        for (let i = 0; i < rowPool.length; i++) {
+          rowPool[i].style.display = i < count ? "grid" : "none";
+        }
+      }
+
+      function render() {
+        const scrollTop = list.scrollTop;
+        const viewH = list.clientHeight;
+        const start = Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - OVERSCAN);
+        const visible = Math.ceil(viewH / ROW_HEIGHT) + OVERSCAN * 2;
+        const end = Math.min(TOTAL, start + visible);
+        const count = end - start;
+        ensureRows(count);
+
+        for (let i = 0; i < count; i++) {
+          const item = data[start + i];
+          const row = rowPool[i];
+          row.style.top = (start + i) * ROW_HEIGHT + "px";
+          row.style.height = ROW_HEIGHT + "px";
+          row.children[0].textContent = String(item.id);
+          row.children[1].textContent = item.title;
+          row.children[2].textContent = item.status;
+        }
+
+        mountedEl.textContent = String(count);
+        rangeEl.textContent = start + 1 + " - " + end;
+      }
+
+      list.addEventListener("scroll", () => requestAnimationFrame(render), { passive: true });
+      window.addEventListener("resize", render);
+      render();
+    </script>
+  </body>
+</html>

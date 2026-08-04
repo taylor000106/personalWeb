@@ -10,35 +10,61 @@ type Particle = {
   r: number;
 };
 
+/**
+ * Hero atmosphere layer. Deferred by parent via dynamic().
+ * Pauses when tab hidden / prefers-reduced-motion / scrolled past hero.
+ */
 export function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      ctx.fillStyle = "#05050c";
+      ctx.fillRect(
+        0,
+        0,
+        canvas.width || window.innerWidth,
+        canvas.height || window.innerHeight,
+      );
+      return;
+    }
 
     let width = 0;
     let height = 0;
     let particles: Particle[] = [];
     let mouse = { x: -9999, y: -9999 };
     let frameId = 0;
+    let running = true;
+    let inHero = true;
 
-    const count = () => Math.min(90, Math.floor((width * height) / 14000));
+    const count = () => {
+      const area = width * height;
+      const mobile = width < 768;
+      return Math.min(mobile ? 36 : 72, Math.floor(area / (mobile ? 22000 : 16000)));
+    };
 
     const resize = () => {
       width = window.innerWidth;
       height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       const n = count();
       particles = Array.from({ length: n }, () => ({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
-        r: Math.random() * 2 + 1,
+        vx: (Math.random() - 0.5) * 0.55,
+        vy: (Math.random() - 0.5) * 0.55,
+        r: Math.random() * 1.8 + 0.8,
       }));
     };
 
@@ -47,16 +73,23 @@ export function ParticleCanvas() {
     };
 
     const draw = () => {
-      ctx.fillStyle = "rgba(5, 5, 12, 0.22)";
+      if (!running || !inHero) {
+        frameId = requestAnimationFrame(draw);
+        return;
+      }
+
+      ctx.fillStyle = "rgba(5, 5, 12, 0.28)";
       ctx.fillRect(0, 0, width, height);
 
-      for (const p of particles) {
+      const n = particles.length;
+      for (let i = 0; i < n; i += 1) {
+        const p = particles[i];
         const dx = mouse.x - p.x;
         const dy = mouse.y - p.y;
         const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 120) {
-          p.vx -= (dx / dist) * 0.02;
-          p.vy -= (dy / dist) * 0.02;
+        if (dist < 110 && dist > 0.01) {
+          p.vx -= (dx / dist) * 0.018;
+          p.vy -= (dy / dist) * 0.018;
         }
         p.x += p.vx;
         p.y += p.vy;
@@ -67,20 +100,22 @@ export function ParticleCanvas() {
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(167, 139, 250, 0.85)";
+        ctx.fillStyle = "rgba(167, 139, 250, 0.8)";
         ctx.fill();
       }
 
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
+      // Limit link checks: every particle to next few neighbors only
+      const linkLimit = Math.min(12, n);
+      for (let i = 0; i < n; i += 1) {
+        const a = particles[i];
+        for (let j = i + 1; j < Math.min(n, i + linkLimit); j += 1) {
           const b = particles[j];
           const dx = a.x - b.x;
           const dy = a.y - b.y;
           const d = Math.sqrt(dx * dx + dy * dy);
-          if (d < 130) {
-            ctx.strokeStyle = `rgba(139, 92, 246, ${1 - d / 130})`;
-            ctx.lineWidth = 0.6;
+          if (d < 110) {
+            ctx.strokeStyle = `rgba(139, 92, 246, ${0.85 - d / 110})`;
+            ctx.lineWidth = 0.55;
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
@@ -92,17 +127,31 @@ export function ParticleCanvas() {
       frameId = requestAnimationFrame(draw);
     };
 
+    const onVisibility = () => {
+      running = document.visibilityState === "visible";
+    };
+
+    const onScroll = () => {
+      inHero = window.scrollY < window.innerHeight * 0.95;
+    };
+
     resize();
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mousemove", onMove, { passive: true });
+    document.addEventListener("visibilitychange", onVisibility);
+    window.addEventListener("scroll", onScroll, { passive: true });
     frameId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(frameId);
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMove);
+      document.removeEventListener("visibilitychange", onVisibility);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 -z-10 h-full w-full" aria-hidden />;
+  return (
+    <canvas ref={canvasRef} className="fixed inset-0 -z-10 h-full w-full" aria-hidden />
+  );
 }

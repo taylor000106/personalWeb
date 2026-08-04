@@ -1,9 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import type { LabEffect } from "@/data/lab-effects";
+import { getLabOrigin, type LabEffect } from "@/data/lab-effects";
+import { useI18n } from "@/i18n/LanguageProvider";
 
 export function LabCard({ effect }: { effect: LabEffect }) {
+  const { t } = useI18n();
   const interactive = effect.interactive === true;
   const href = `/lab/${effect.slug}`;
+  const categoryLabel = t.lab.categories[effect.category];
+  const origin = getLabOrigin(effect);
+  const originLabel = origin === "inspired" ? t.lab.originInspired : t.lab.originOriginal;
 
   return (
     <article className="group">
@@ -14,28 +21,30 @@ export function LabCard({ effect }: { effect: LabEffect }) {
         <div className="relative aspect-[4/3] w-full overflow-hidden">
           <iframe
             src={effect.demoPath}
-            title={`${effect.title} 预览`}
-            className={`absolute left-1/2 top-[58%] h-[520px] w-[720px] -translate-x-1/2 -translate-y-1/2 scale-[0.42] border-0 origin-center ${
+            title={effect.title}
+            className={`absolute top-[58%] left-1/2 h-[520px] w-[720px] origin-center -translate-x-1/2 -translate-y-1/2 scale-[0.42] border-0 ${
               interactive ? "pointer-events-auto" : "pointer-events-none"
             }`}
             loading="lazy"
             tabIndex={interactive ? 0 : -1}
           />
-          {interactive ? (
-            <p className="pointer-events-none absolute left-3 top-3 rounded-full bg-black/55 px-2 py-0.5 text-[10px] text-white/90 backdrop-blur-sm">
-              可在此预览交互
-            </p>
-          ) : null}
+          <p className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/55 px-2 py-0.5 text-[10px] tracking-wide text-white/90 uppercase backdrop-blur-sm">
+            {categoryLabel}
+            {interactive ? ` · ${t.lab.interactive}` : ""}
+          </p>
+          <p className="pointer-events-none absolute top-3 right-3 rounded-full bg-black/45 px-2 py-0.5 text-[10px] text-white/75 backdrop-blur-sm">
+            {originLabel}
+          </p>
           <Link
             href={href}
-            className="absolute bottom-3 right-3 z-10 rounded-full bg-black/50 px-2.5 py-1 text-xs text-white/90 backdrop-blur-sm transition-opacity hover:bg-black/70"
+            className="absolute right-3 bottom-3 z-10 rounded-full bg-black/50 px-2.5 py-1 text-xs text-white/90 backdrop-blur-sm transition-opacity hover:bg-black/70"
           >
-            查看详情 →
+            {t.lab.detail}
           </Link>
         </div>
       </div>
       <Link href={href} className="mt-3 block px-1">
-        <h2 className="text-center text-base font-semibold text-white group-hover:text-violet-200 transition-colors">
+        <h2 className="text-center text-base font-semibold text-white transition-colors group-hover:text-violet-200">
           {effect.title}
         </h2>
         <p className="mt-1 text-center text-xs text-zinc-500">{effect.subtitle}</p>

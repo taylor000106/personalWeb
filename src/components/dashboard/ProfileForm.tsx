@@ -55,7 +55,10 @@ export function ProfileForm() {
           )}
         </div>
       ))}
-      <button type="submit" className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white">
+      <button
+        type="submit"
+        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
+      >
         保存
       </button>
       {saved ? <span className="ml-3 text-sm text-green-600">已保存</span> : null}

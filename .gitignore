@@ -43,6 +43,14 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# scripts
-scripts/
+# scripts (keep useful helpers tracked; ignore one-off patch scripts)
+scripts/*
+!scripts/hash-password.mjs
+!scripts/analyze.mjs
+!scripts/lighthouse-hint.mjs
 *.mjs
+!scripts/hash-password.mjs
+!scripts/analyze.mjs
+!scripts/lighthouse-hint.mjs
+!eslint.config.mjs
+!vitest.config.mts

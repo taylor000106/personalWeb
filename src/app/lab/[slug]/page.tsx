@@ -1,7 +1,7 @@
 import { CodeViewer } from "@/components/lab/CodeViewer";
 import { DemoFrame } from "@/components/lab/DemoFrame";
 import { LabShell } from "@/components/lab/LabShell";
-import { getAllLabSlugs, getLabEffect } from "@/data/lab-effects";
+import { getAllLabSlugs, getLabEffect, getLabOrigin } from "@/data/lab-effects";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -27,21 +27,28 @@ export default async function LabDetailPage({ params }: PageProps) {
   const effect = getLabEffect(slug);
   if (!effect) notFound();
 
+  const origin = getLabOrigin(effect);
   const interactionHint =
-    effect.slug === "shy-bird-3d" ?
-      "在下方区域内移动鼠标：中间的小鸟会看你的光标，盯太久两侧的小鸟会害羞转头。"
-    : effect.slug === "hobbiton-hero" ?
-      "在下方区域内向下滚动页面，触发镜头推进与标题显现。"
-    : effect.slug === "interactive-rocket" ?
-      "鼠标悬停改变火箭朝向，按住鼠标左键加速。"
-    : effect.interactive ?
-      "在下方演示区域内直接操作（鼠标 / 键盘 / 滚动）。"
-    : "自动播放动画，无需操作。";
+    effect.slug === "shy-bird-3d"
+      ? "在下方区域内移动鼠标：中间的小鸟会看你的光标，盯太久两侧的小鸟会害羞转头。"
+      : effect.slug === "hobbiton-hero"
+        ? "在下方区域内向下滚动页面，触发镜头推进与标题显现。"
+        : effect.slug === "interactive-rocket"
+          ? "鼠标悬停改变火箭朝向，按住鼠标左键加速。"
+          : effect.interactive
+            ? "在下方演示区域内直接操作（鼠标 / 键盘 / 滚动）。"
+            : "自动播放动画，无需操作。";
 
   return (
     <LabShell>
       <main className="mx-auto max-w-4xl px-6 py-8 md:py-12">
         <div className="mb-6 flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-xs text-zinc-300">
+            {effect.category}
+          </span>
+          <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-xs text-zinc-400">
+            {origin === "inspired" ? "社区灵感" : "原创实验"}
+          </span>
           {effect.tags.map((tag) => (
             <span
               key={tag}
@@ -60,7 +67,11 @@ export default async function LabDetailPage({ params }: PageProps) {
           style={{ backgroundColor: effect.previewBg }}
         >
           <div className="relative aspect-video w-full min-h-[280px] md:min-h-[360px]">
-            <DemoFrame src={effect.demoPath} title={effect.title} className="absolute inset-0" />
+            <DemoFrame
+              src={effect.demoPath}
+              title={effect.title}
+              className="absolute inset-0"
+            />
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-black/30 px-4 py-3 backdrop-blur-sm">
             <p className="text-xs text-zinc-400">{interactionHint}</p>
@@ -68,7 +79,7 @@ export default async function LabDetailPage({ params }: PageProps) {
               href={effect.demoPath}
               target="_blank"
               rel="noreferrer"
-              className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black hover:bg-violet-100 transition-colors"
+              className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black transition-colors hover:bg-violet-100"
             >
               全屏打开演示
             </a>
@@ -79,31 +90,56 @@ export default async function LabDetailPage({ params }: PageProps) {
           <h2 className="text-lg font-semibold text-violet-200">简介</h2>
           <p className="leading-relaxed text-zinc-300">{effect.summary}</p>
           <p className="text-sm text-zinc-500">
-            收录日期 {effect.publishedAt} · 来源{" "}
-            <a
-              href={effect.source.url}
-              target="_blank"
-              rel="noreferrer"
-              className="text-violet-300 hover:underline"
-            >
-              {effect.source.name}
-            </a>
+            收录日期 {effect.publishedAt}
+            {effect.source ? (
+              <>
+                {" "}
+                · 来源{" "}
+                <a
+                  href={effect.source.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-violet-300 hover:underline"
+                >
+                  {effect.source.name}
+                </a>
+              </>
+            ) : (
+              <> · Original lab experiment</>
+            )}
           </p>
         </section>
+
+        {effect.techPoints?.length ? (
+          <section className="mt-10">
+            <h2 className="text-lg font-semibold text-violet-200">技术点</h2>
+            <ul className="mt-4 space-y-2">
+              {effect.techPoints.map((point) => (
+                <li key={point} className="flex gap-2 text-sm text-zinc-300">
+                  <span className="text-violet-400">▸</span>
+                  <span>{point}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <section className="mt-10">
           <h2 className="text-lg font-semibold text-violet-200">技术栈</h2>
           <div className="mt-3 flex flex-wrap gap-2">
-            {effect.techStack.map((t) => (
-              <span key={t} className="rounded-lg bg-white/5 px-3 py-1 text-sm text-zinc-300">
-                {t}
+            {effect.techStack.map((item) => (
+              <span
+                key={item}
+                className="rounded-lg bg-white/5 px-3 py-1 text-sm text-zinc-300"
+              >
+                {item}
               </span>
             ))}
           </div>
         </section>
 
         <section className="mt-10 space-y-6">
-          <h2 className="text-lg font-semibold text-violet-200">解析</h2>
+          <h2 className="text-lg font-semibold text-violet-200">实现说明</h2>
           {effect.analysis.map((block) => (
             <div
               key={block.heading}
@@ -131,7 +167,7 @@ export default async function LabDetailPage({ params }: PageProps) {
           <div className="mb-4 flex items-end justify-between gap-4">
             <h2 className="text-lg font-semibold text-violet-200">完整源码</h2>
             <Link href="/lab" className="text-sm text-zinc-500 hover:text-white">
-              ← 更多效果
+              ← 更多实验
             </Link>
           </div>
           <CodeViewer src={effect.demoPath} />

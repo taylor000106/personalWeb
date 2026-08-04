@@ -1,78 +1,81 @@
-import { getSession } from "@/lib/auth";
-import { getDb, type Note } from "@/lib/db";
+import { parseJsonBody, requireApiSession } from "@/lib/api";
+import {
+  createNote,
+  deleteNote,
+  listNotes,
+  logActivity,
+  updateNote,
+} from "@/lib/repositories";
+import {
+  idQuerySchema,
+  noteCreateSchema,
+  noteUpdateSchema,
+} from "@/lib/validations/notes";
 import { NextResponse } from "next/server";
-import { v4 as uuid } from "uuid";
 
 export const runtime = "nodejs";
 
-async function auth() {
-  const session = await getSession();
-  if (!session) return null;
-  return session;
-}
-
 export async function GET() {
-  if (!(await auth())) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
-  }
-  const notes = getDb()
-    .prepare("SELECT * FROM notes ORDER BY updated_at DESC")
-    .all() as Note[];
-  return NextResponse.json(notes);
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+  return NextResponse.json(listNotes());
 }
 
 export async function POST(request: Request) {
-  if (!(await auth())) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
-  }
-  const body = await request.json();
-  const title = String(body.title || "").trim();
-  const content = String(body.content || "");
-  const tags = String(body.tags || "").trim();
-  if (!title) {
-    return NextResponse.json({ error: "标题不能为空" }, { status: 400 });
-  }
-  const now = new Date().toISOString();
-  const id = uuid();
-  getDb()
-    .prepare(
-      "INSERT INTO notes (id, title, content, tags, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?)",
-    )
-    .run(id, title, content, tags, now, now);
-  return NextResponse.json({ id, title, content, tags, created_at: now, updated_at: now });
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+
+  const parsed = await parseJsonBody(request, noteCreateSchema);
+  if (!parsed.ok) return parsed.response;
+
+  const note = createNote(parsed.data);
+  logActivity({
+    action: "create",
+    entity: "note",
+    entityId: note.id,
+    detail: note.title,
+  });
+  return NextResponse.json(note);
 }
 
 export async function PUT(request: Request) {
-  if (!(await auth())) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+
+  const parsed = await parseJsonBody(request, noteUpdateSchema);
+  if (!parsed.ok) return parsed.response;
+
+  const ok = updateNote(parsed.data);
+  if (!ok) {
+    return NextResponse.json({ error: "Note not found" }, { status: 404 });
   }
-  const body = await request.json();
-  const id = String(body.id || "");
-  const title = String(body.title || "").trim();
-  const content = String(body.content || "");
-  const tags = String(body.tags || "").trim();
-  if (!id || !title) {
-    return NextResponse.json({ error: "参数无效" }, { status: 400 });
-  }
-  const now = new Date().toISOString();
-  const result = getDb()
-    .prepare("UPDATE notes SET title = ?, content = ?, tags = ?, updated_at = ? WHERE id = ?")
-    .run(title, content, tags, now, id);
-  if (result.changes === 0) {
-    return NextResponse.json({ error: "笔记不存在" }, { status: 404 });
-  }
+  logActivity({
+    action: "update",
+    entity: "note",
+    entityId: parsed.data.id,
+    detail: parsed.data.title,
+  });
   return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(request: Request) {
-  if (!(await auth())) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
-  }
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+
   const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-  if (!id) {
-    return NextResponse.json({ error: "缺少 id" }, { status: 400 });
+  const parsed = idQuerySchema.safeParse({ id: searchParams.get("id") });
+  if (!parsed.success) {
+    return NextResponse.json({ error: "Invalid id" }, { status: 400 });
   }
-  getDb().prepare("DELETE FROM notes WHERE id = ?").run(id);
+
+  const ok = deleteNote(parsed.data.id);
+  if (!ok) {
+    return NextResponse.json({ error: "Note not found" }, { status: 404 });
+  }
+  logActivity({
+    action: "delete",
+    entity: "note",
+    entityId: parsed.data.id,
+  });
   return NextResponse.json({ ok: true });
 }

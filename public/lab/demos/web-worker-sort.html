@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Web Worker Sort</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --panel: #121826;
+        --line: #243044;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --ok: #34d399;
+        --warn: #fbbf24;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      button {
+        font: inherit;
+        border: 0;
+        border-radius: 8px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-weight: 600;
+        background: #8b5cf6;
+        color: white;
+      }
+      button.ghost {
+        background: transparent;
+        border: 1px solid var(--line);
+        color: var(--text);
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel);
+        padding: 12px;
+      }
+      .metric {
+        font-size: 13px;
+      }
+      .metric strong {
+        color: var(--ok);
+      }
+      .metric.warn strong {
+        color: var(--warn);
+      }
+      progress {
+        width: 100%;
+        height: 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div>
+        <h1>Web Worker vs Main Thread</h1>
+        <p class="muted">
+          对 80 万随机数排序：主线程会卡住交互；Worker 在后台完成，UI 仍可点击。
+        </p>
+      </div>
+      <div class="row">
+        <button id="main">Sort on main thread</button>
+        <button id="worker" class="ghost">Sort in Worker</button>
+        <button id="ping" class="ghost">Ping UI</button>
+      </div>
+      <div class="panel">
+        <p class="metric" id="status">Idle</p>
+        <progress id="bar" value="0" max="100"></progress>
+        <p class="muted" id="pingLog" style="margin-top: 10px">Ping log: —</p>
+      </div>
+    </div>
+    <script>
+      const status = document.getElementById("status");
+      const bar = document.getElementById("bar");
+      const pingLog = document.getElementById("pingLog");
+      let pings = 0;
+
+      function makeData(n) {
+        const arr = new Float64Array(n);
+        for (let i = 0; i < n; i++) arr[i] = Math.random();
+        return arr;
+      }
+
+      function sortCopy(arr) {
+        const copy = arr.slice();
+        copy.sort();
+        return copy[0];
+      }
+
+      document.getElementById("ping").onclick = () => {
+        pings += 1;
+        pingLog.textContent = "Ping log: UI responded #" + pings + " at " + Date.now();
+      };
+
+      document.getElementById("main").onclick = () => {
+        status.className = "metric warn";
+        status.innerHTML = "Running on <strong>main thread</strong>… try Ping UI";
+        bar.value = 30;
+        const t0 = performance.now();
+        setTimeout(() => {
+          const sample = sortCopy(makeData(800000));
+          const ms = (performance.now() - t0).toFixed(1);
+          bar.value = 100;
+          status.innerHTML =
+            "Main thread done in <strong>" +
+            ms +
+            " ms</strong> (sample " +
+            sample.toFixed(6) +
+            ")";
+        }, 30);
+      };
+
+      document.getElementById("worker").onclick = () => {
+        status.className = "metric";
+        status.innerHTML = "Running in <strong>Worker</strong>… Ping UI should stay smooth";
+        bar.value = 20;
+        const blob = new Blob(
+          [
+            "onmessage=function(e){var t0=performance.now();var a=new Float64Array(e.data);a.sort();postMessage({ms:performance.now()-t0,sample:a[0]});};",
+          ],
+          { type: "text/javascript" },
+        );
+        const worker = new Worker(URL.createObjectURL(blob));
+        const data = makeData(800000);
+        worker.onmessage = (e) => {
+          bar.value = 100;
+          status.innerHTML =
+            "Worker done in <strong>" +
+            e.data.ms.toFixed(1) +
+            " ms</strong> (sample " +
+            e.data.sample.toFixed(6) +
+            ")";
+          worker.terminate();
+        };
+        worker.postMessage(data.buffer, [data.buffer]);
+        bar.value = 60;
+      };
+    </script>
+  </body>
+</html>

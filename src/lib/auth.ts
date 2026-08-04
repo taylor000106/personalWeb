@@ -5,36 +5,53 @@ import { cookies } from "next/headers";
 const COOKIE_NAME = "yyw_session";
 const MAX_AGE = 60 * 60 * 24 * 30;
 
+export type SessionPayload = {
+  email: string;
+  role: "admin";
+};
+
 function getSecret() {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret.length < 16) {
-    throw new Error("AUTH_SECRET 未配置或过短，请在 .env.local 中设置");
+    throw new Error("AUTH_SECRET is missing or too short");
   }
   return new TextEncoder().encode(secret);
 }
 
+function isBcryptHash(value: string) {
+  return /^\$2[aby]?\$\d{2}\$/.test(value);
+}
+
 export async function verifyCredentials(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminEmail = process.env.ADMIN_EMAIL?.trim();
+  // Strip accidental quotes; dotenv-expand can mangle unescaped $
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim().replace(/^["']|["']$/g, "");
   if (!adminEmail || !adminPassword) {
-    return { ok: false as const, error: "服务端未配置管理员账号" };
+    return { ok: false as const, error: "Admin account is not configured" };
   }
-  if (email.trim().toLowerCase() !== adminEmail.trim().toLowerCase()) {
-    return { ok: false as const, error: "邮箱或密码错误" };
+  if (!isBcryptHash(adminPassword)) {
+    return {
+      ok: false as const,
+      error:
+        "ADMIN_PASSWORD must be a bcrypt hash. Escape $ as \\$ in .env.local, then restart.",
+    };
   }
-  const match =
-    adminPassword.startsWith("$2") ?
-      await bcrypt.compare(password, adminPassword)
-    : password === adminPassword;
+  if (email.trim().toLowerCase() !== adminEmail.toLowerCase()) {
+    return { ok: false as const, error: "Invalid email or password" };
+  }
+  const match = await bcrypt.compare(password, adminPassword);
   if (!match) {
-    return { ok: false as const, error: "邮箱或密码错误" };
+    return { ok: false as const, error: "Invalid email or password" };
   }
-  return { ok: true as const };
+  return { ok: true as const, role: "admin" as const };
 }
 
 export async function createSession(email: string, remember: boolean) {
   const maxAge = remember ? MAX_AGE : 60 * 60 * 24;
-  const token = await new SignJWT({ email })
+  const token = await new SignJWT({
+    email,
+    role: "admin" satisfies SessionPayload["role"],
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime(`${maxAge}s`)
@@ -55,7 +72,7 @@ export async function destroySession() {
   cookieStore.delete(COOKIE_NAME);
 }
 
-export async function getSession() {
+export async function getSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const token = cookieStore.get(COOKIE_NAME)?.value;
   if (!token) return null;
@@ -63,7 +80,8 @@ export async function getSession() {
     const { payload } = await jwtVerify(token, getSecret());
     const email = payload.email;
     if (typeof email !== "string") return null;
-    return { email };
+    const role = "admin" as const;
+    return { email, role };
   } catch {
     return null;
   }

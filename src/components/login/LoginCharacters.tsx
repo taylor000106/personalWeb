@@ -123,8 +123,12 @@ export function LoginCharacters({
         return;
       }
 
-      const { isTyping: typing, passwordLen: pwLen, showPassword: showPw, lookingAtEachOther: looking } =
-        stateRef.current;
+      const {
+        isTyping: typing,
+        passwordLen: pwLen,
+        showPassword: showPw,
+        lookingAtEachOther: looking,
+      } = stateRef.current;
 
       const pp = calcPos($purple);
       const bp = calcPos($black);
@@ -213,7 +217,9 @@ export function LoginCharacters({
         pupil.style.transform = `translate(${o.x}px, ${o.y}px)`;
       });
 
-      $orange.style.transform = isShowingPw ? "skewX(0deg)" : `skewX(${op.bodySkew || 0}deg)`;
+      $orange.style.transform = isShowingPw
+        ? "skewX(0deg)"
+        : `skewX(${op.bodySkew || 0}deg)`;
 
       let ofx: number | undefined;
       let ofy: number | undefined;
@@ -232,7 +238,9 @@ export function LoginCharacters({
         (el as HTMLElement).style.transform = `translate(${o.x}px, ${o.y}px)`;
       });
 
-      $yellow.style.transform = isShowingPw ? "skewX(0deg)" : `skewX(${yp.bodySkew || 0}deg)`;
+      $yellow.style.transform = isShowingPw
+        ? "skewX(0deg)"
+        : `skewX(${yp.bodySkew || 0}deg)`;
 
       let yfx: number | undefined;
       let yfy: number | undefined;
@@ -314,7 +322,10 @@ export function LoginCharacters({
             </div>
           </div>
           <div ref={blackRef} className={`${styles.char} ${styles.charBlack}`}>
-            <div ref={blackEyesRef} className={`${styles.eyesWrap} ${styles.eyesWrapTight}`}>
+            <div
+              ref={blackEyesRef}
+              className={`${styles.eyesWrap} ${styles.eyesWrapTight}`}
+            >
               <div className={styles.eyeball} style={{ width: 16, height: 16 }}>
                 <div className={styles.pupil} style={{ width: 6, height: 6 }} />
               </div>
@@ -324,13 +335,19 @@ export function LoginCharacters({
             </div>
           </div>
           <div ref={orangeRef} className={`${styles.char} ${styles.charOrange}`}>
-            <div ref={orangeEyesRef} className={`${styles.eyesWrap} ${styles.eyesWrapFast}`}>
+            <div
+              ref={orangeEyesRef}
+              className={`${styles.eyesWrap} ${styles.eyesWrapFast}`}
+            >
               <div className={styles.pupilOnly} style={{ width: 12, height: 12 }} />
               <div className={styles.pupilOnly} style={{ width: 12, height: 12 }} />
             </div>
           </div>
           <div ref={yellowRef} className={`${styles.char} ${styles.charYellow}`}>
-            <div ref={yellowEyesRef} className={`${styles.eyesWrap} ${styles.eyesWrapTight} ${styles.eyesWrapFast}`}>
+            <div
+              ref={yellowEyesRef}
+              className={`${styles.eyesWrap} ${styles.eyesWrapTight} ${styles.eyesWrapFast}`}
+            >
               <div className={styles.pupilOnly} style={{ width: 12, height: 12 }} />
               <div className={styles.pupilOnly} style={{ width: 12, height: 12 }} />
             </div>

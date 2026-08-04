@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Storage Playground</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0c1222;
+        --panel: #111827;
+        --line: #243044;
+        --text: #e5e7eb;
+        --muted: #94a3b8;
+        --accent: #38bdf8;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: ui-sans-serif, system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        display: grid;
+        gap: 12px;
+        padding: 16px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .muted {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      input,
+      select,
+      button,
+      textarea {
+        font: inherit;
+        border-radius: 8px;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--text);
+        padding: 8px 10px;
+      }
+      input,
+      select {
+        flex: 1;
+        min-width: 120px;
+      }
+      button {
+        cursor: pointer;
+        background: #0ea5e9;
+        border-color: transparent;
+        color: #04111a;
+        font-weight: 600;
+      }
+      button.ghost {
+        background: transparent;
+        color: var(--text);
+        border-color: var(--line);
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--panel);
+        padding: 12px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 6px 4px;
+        border-bottom: 1px solid var(--line);
+        word-break: break-all;
+      }
+      th {
+        color: var(--muted);
+        font-weight: 500;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 999px;
+        background: rgba(56, 189, 248, 0.15);
+        color: var(--accent);
+        font-size: 11px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div>
+        <h1>Web Storage Playground</h1>
+        <p class="muted">
+          对比 localStorage / sessionStorage：写入、读取、配额感知与清理。刷新后观察差异。
+        </p>
+      </div>
+
+      <div class="panel">
+        <div class="row" style="margin-bottom: 8px">
+          <select id="store">
+            <option value="local">localStorage</option>
+            <option value="session">sessionStorage</option>
+          </select>
+          <span class="badge" id="count">0 keys</span>
+        </div>
+        <div class="row">
+          <input id="key" placeholder="key" value="theme" />
+          <input id="value" placeholder="value" value="dark" />
+        </div>
+        <div class="row" style="margin-top: 8px">
+          <button id="set">Set</button>
+          <button id="get" class="ghost">Get</button>
+          <button id="remove" class="ghost">Remove</button>
+          <button id="clear" class="ghost">Clear</button>
+        </div>
+        <p class="muted" id="msg" style="margin: 10px 0 0">Ready.</p>
+      </div>
+
+      <div class="panel">
+        <table>
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      function api() {
+        return $("store").value === "local" ? localStorage : sessionStorage;
+      }
+      function refresh() {
+        const s = api();
+        const body = $("tbody");
+        body.innerHTML = "";
+        let n = 0;
+        for (let i = 0; i < s.length; i++) {
+          const k = s.key(i);
+          const tr = document.createElement("tr");
+          tr.innerHTML =
+            "<td>" +
+            k +
+            "</td><td>" +
+            (s.getItem(k) || "").replace(/</g, "&lt;") +
+            "</td>";
+          body.appendChild(tr);
+          n++;
+        }
+        $("count").textContent = n + " keys";
+      }
+      function say(text) {
+        $("msg").textContent = text;
+      }
+      $("set").onclick = () => {
+        try {
+          api().setItem($("key").value, $("value").value);
+          say("Set OK");
+          refresh();
+        } catch (e) {
+          say("Set failed: " + (e && e.message ? e.message : e));
+        }
+      };
+      $("get").onclick = () => {
+        const v = api().getItem($("key").value);
+        say(v == null ? "null" : "Got: " + v);
+      };
+      $("remove").onclick = () => {
+        api().removeItem($("key").value);
+        say("Removed");
+        refresh();
+      };
+      $("clear").onclick = () => {
+        api().clear();
+        say("Cleared");
+        refresh();
+      };
+      $("store").onchange = refresh;
+      refresh();
+    </script>
+  </body>
+</html>

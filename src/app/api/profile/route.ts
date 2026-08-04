@@ -1,40 +1,35 @@
-import { getSession } from "@/lib/auth";
-import { getDb } from "@/lib/db";
+import { parseJsonBody, requireApiSession } from "@/lib/api";
+import { getProfile, logActivity, updateProfile } from "@/lib/repositories";
+import { PROFILE_KEYS, profileUpdateSchema } from "@/lib/validations/profile";
 import { NextResponse } from "next/server";
 
 export const runtime = "nodejs";
 
-const ALLOWED_KEYS = ["display_name", "bio", "location", "github", "email_public"];
-
 export async function GET() {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
-  }
-  const rows = getDb().prepare("SELECT key, value FROM profile").all() as {
-    key: string;
-    value: string;
-  }[];
-  const profile: Record<string, string> = {};
-  for (const row of rows) {
-    profile[row.key] = row.value;
-  }
-  return NextResponse.json(profile);
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+  return NextResponse.json(getProfile());
 }
 
 export async function PUT(request: Request) {
-  const session = await getSession();
-  if (!session) {
-    return NextResponse.json({ error: "未登录" }, { status: 401 });
-  }
-  const body = await request.json();
-  const upsert = getDb().prepare(
-    "INSERT INTO profile (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
-  );
-  for (const key of ALLOWED_KEYS) {
-    if (key in body) {
-      upsert.run(key, String(body[key] ?? ""));
+  const auth = await requireApiSession();
+  if (!auth.ok) return auth.response;
+
+  const parsed = await parseJsonBody(request, profileUpdateSchema);
+  if (!parsed.ok) return parsed.response;
+
+  const fields: Record<string, string> = {};
+  for (const key of PROFILE_KEYS) {
+    if (key in parsed.data && parsed.data[key] !== undefined) {
+      fields[key] = parsed.data[key] ?? "";
     }
   }
+
+  updateProfile(fields);
+  logActivity({
+    action: "update",
+    entity: "profile",
+    detail: Object.keys(fields).join(", "),
+  });
   return NextResponse.json({ ok: true });
 }

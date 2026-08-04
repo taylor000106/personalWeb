@@ -69,7 +69,10 @@ export function LinksManager() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        <button type="submit" className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white">
+        <button
+          type="submit"
+          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
+        >
           添加
         </button>
       </form>
@@ -95,7 +98,11 @@ export function LinksManager() {
                     <p className="mt-2 text-sm text-zinc-600">{item.description}</p>
                   ) : null}
                 </div>
-                <button type="button" className="text-xs text-red-600" onClick={() => remove(item.id)}>
+                <button
+                  type="button"
+                  className="text-xs text-red-600"
+                  onClick={() => remove(item.id)}
+                >
                   删除
                 </button>
               </div>
