@@ -28,11 +28,12 @@ export const experiences: ExperienceItem[] = [
     role: "Web 前端开发工程师",
     period: "2022.11 — 2025.02",
     summary:
-      "参与 AI 对话产品（ChatAI）多端研发：小程序 / App / H5 / PC，覆盖登录、对话、支付等核心链路。",
+      "在晟为数科完成两类交付：早期 ToB 后台（授权 / 设备运维 / 应用运营），以及后期 ChatAI 多端 AI 对话产品。",
     highlights: [
+      "ToB：PRM 授权渠道、KMS 设备运维、ToC CMS 应用运营等 Vue 后台模块落地",
+      "ChatAI：小程序 / App / H5 / PC 多端研发，覆盖登录、流式对话、支付等核心链路",
       "从 0 到 1 参与项目搭建与核心链路落地，配合第三方 SDK 接入与联调",
-      "关注首屏与核心交互性能，推动白屏、首屏渲染等指标优化",
-      "封装 uni-app 多端 SSE 能力并发布至插件市场，沉淀流式对话组件方案",
+      "关注首屏与核心交互性能；封装 uni-app 多端 SSE 能力并发布至插件市场",
     ],
   },
 ];

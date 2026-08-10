@@ -44,6 +44,16 @@ describe("buildLocalAnswer boundaries", () => {
     expect(text).not.toMatch(/参考知识库|\.md/);
   });
 
+  it("answers site tech stack without listing other products", () => {
+    invalidateKnowledgeCache();
+    invalidateRetrievalCache();
+    const { text, meta } = buildLocalAnswer("这个个人网站用了哪些技术？");
+    expect(meta.inScope).toBe(true);
+    expect(text).toMatch(/Next\.js/i);
+    expect(text).toMatch(/TypeScript|SQLite|Docker|SSE/i);
+    expect(text).not.toMatch(/ChatAI|SCRM|企微/);
+  });
+
   it("rejects out-of-scope questions", () => {
     invalidateKnowledgeCache();
     invalidateRetrievalCache();

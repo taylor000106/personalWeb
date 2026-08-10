@@ -75,6 +75,45 @@ function SourceRefs({ links }: { links: ResolvedSourceLink[] }) {
   );
 }
 
+function SuggestionChips({
+  suggestions,
+  onAsk,
+  disabled,
+  exclude = [],
+}: {
+  suggestions: string[];
+  onAsk: (q: string) => void;
+  disabled: boolean;
+  exclude?: string[];
+}) {
+  const { locale } = useI18n();
+  const isZh = locale === "zh";
+  const excluded = new Set(exclude.map((q) => q.trim()));
+  const visible = suggestions.filter((s) => !excluded.has(s.trim()));
+  const list = visible.length > 0 ? visible : suggestions;
+
+  return (
+    <div>
+      <p className="text-[11px] tracking-[0.16em] text-zinc-500 uppercase">
+        {isZh ? "推荐问题" : "Suggested questions"}
+      </p>
+      <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+        {list.map((s) => (
+          <button
+            key={s}
+            type="button"
+            disabled={disabled}
+            onClick={() => onAsk(s)}
+            className="border border-white/15 bg-white/[0.03] px-3 py-2.5 text-left text-sm text-zinc-200 transition-colors hover:border-violet-400/45 hover:bg-violet-500/10 hover:text-white disabled:opacity-50"
+          >
+            {s}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function EmptyWelcome({
   suggestions,
   onAsk,
@@ -116,24 +155,7 @@ function EmptyWelcome({
         </ul>
       </div>
 
-      <div>
-        <p className="text-[11px] tracking-[0.16em] text-zinc-500 uppercase">
-          {isZh ? "推荐问题" : "Suggested questions"}
-        </p>
-        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-          {suggestions.map((s) => (
-            <button
-              key={s}
-              type="button"
-              disabled={disabled}
-              onClick={() => onAsk(s)}
-              className="border border-white/15 bg-white/[0.03] px-3 py-2.5 text-left text-sm text-zinc-200 transition-colors hover:border-violet-400/45 hover:bg-violet-500/10 hover:text-white disabled:opacity-50"
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      </div>
+      <SuggestionChips suggestions={suggestions} onAsk={onAsk} disabled={disabled} />
     </div>
   );
 }
@@ -285,50 +307,64 @@ export function AssistantChat() {
             disabled={streaming}
           />
         ) : (
-          items.map((item, idx) => {
-            const body =
-              item.role === "assistant"
-                ? stripLegacySourceFooter(item.content)
-                : item.content;
-            const links =
-              item.role === "assistant" && item.sources?.length
-                ? resolveSourceLinks(item.sources)
-                : [];
-            const showSources =
-              item.role === "assistant" &&
-              links.length > 0 &&
-              !(streaming && idx === items.length - 1);
+          <>
+            {items.map((item, idx) => {
+              const body =
+                item.role === "assistant"
+                  ? stripLegacySourceFooter(item.content)
+                  : item.content;
+              const links =
+                item.role === "assistant" && item.sources?.length
+                  ? resolveSourceLinks(item.sources)
+                  : [];
+              const showSources =
+                item.role === "assistant" &&
+                links.length > 0 &&
+                !(streaming && idx === items.length - 1);
 
-            return (
-              <div
-                key={`${item.role}-${idx}`}
-                className={item.role === "user" ? "text-right" : "text-left"}
-              >
+              return (
                 <div
-                  className={
-                    item.role === "user"
-                      ? "inline-block max-w-[90%] rounded-2xl bg-violet-600 px-4 py-2 text-sm text-white"
-                      : "inline-block max-w-[95%] rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-200"
-                  }
+                  key={`${item.role}-${idx}`}
+                  className={item.role === "user" ? "text-right" : "text-left"}
                 >
-                  {item.role === "assistant" ? (
-                    <div
-                      className="assistant-md leading-relaxed [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_h1]:mb-2 [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:text-base [&_h2]:font-semibold [&_h3]:mb-1 [&_h3]:font-medium"
-                      dangerouslySetInnerHTML={{
-                        __html: renderLiteMarkdown(body),
-                      }}
-                    />
-                  ) : (
-                    item.content
-                  )}
-                  {streaming && idx === items.length - 1 && item.role === "assistant" ? (
-                    <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-violet-400 align-middle" />
-                  ) : null}
-                  {showSources ? <SourceRefs links={links} /> : null}
+                  <div
+                    className={
+                      item.role === "user"
+                        ? "inline-block max-w-[90%] rounded-2xl bg-violet-600 px-4 py-2 text-sm text-white"
+                        : "inline-block max-w-[95%] rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-200"
+                    }
+                  >
+                    {item.role === "assistant" ? (
+                      <div
+                        className="assistant-md leading-relaxed [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_h1]:mb-2 [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:text-base [&_h2]:font-semibold [&_h3]:mb-1 [&_h3]:font-medium"
+                        dangerouslySetInnerHTML={{
+                          __html: renderLiteMarkdown(body),
+                        }}
+                      />
+                    ) : (
+                      item.content
+                    )}
+                    {streaming &&
+                    idx === items.length - 1 &&
+                    item.role === "assistant" ? (
+                      <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-violet-400 align-middle" />
+                    ) : null}
+                    {showSources ? <SourceRefs links={links} /> : null}
+                  </div>
                 </div>
-              </div>
-            );
-          })
+              );
+            })}
+            {!streaming ? (
+              <SuggestionChips
+                suggestions={suggestions}
+                onAsk={(q) => void ask(q)}
+                disabled={streaming}
+                exclude={items
+                  .filter((item) => item.role === "user")
+                  .map((item) => item.content)}
+              />
+            ) : null}
+          </>
         )}
       </div>
 

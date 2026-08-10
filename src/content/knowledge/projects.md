@@ -9,7 +9,7 @@
 
 ## ChatAI Multi-platform
 
-uni-app / Vue / Electron。覆盖小程序、App、H5、PC。
+晟为数科（2022.11—2025.02）。uni-app / Vue / Electron。覆盖小程序、App、H5、PC。
 SSE / WebSocket 流式对话、一键登录、微信/支付宝/Apple Pay、多端发布与桌面端打包。
 
 ## Enterprise WeCom SCRM
@@ -19,12 +19,12 @@ Vue3 + TypeScript + Element Plus + Vant + Pinia。
 
 ## PRM · License & Channel Admin（早期）
 
-Vue2 + Element-UI + ECharts。授权与渠道管理后台：代理商层级、激活码库存、订单与角色权限。
+晟为数科时期 ToB 后台。Vue2 + Element-UI + ECharts。授权与渠道管理：代理商层级、激活码库存、订单与角色权限。
 
 ## KMS Console · Device Ops（早期）
 
-设备终端运维：设备管理、镜像、KMS 激活、策略与权限管控。
+晟为数科时期 ToB 后台。设备终端运维：设备管理、镜像、KMS 激活、策略与权限管控。
 
 ## ToC CMS · App Catalog Admin（早期）
 
-应用上架与运营配置：分类、轮播、热门推荐、活动码、设备与反馈。
+晟为数科时期 ToB 后台。应用上架与运营配置：分类、轮播、热门推荐、活动码、设备与反馈。

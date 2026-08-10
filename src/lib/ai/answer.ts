@@ -18,6 +18,7 @@ export type AnswerMeta = {
 
 type Intent =
   | "projects"
+  | "site_stack"
   | "nextjs"
   | "performance"
   | "ai"
@@ -44,6 +45,13 @@ function detectIntent(question: string): Intent {
   const q = question.toLowerCase();
   if (OOD_HINT.test(q)) return "out_of_scope";
   if (/三点|三點|总结|總結|简要|簡潔|概括/.test(q)) return "summary";
+  if (
+    /(个人网站|本站|这个网站|這個網站|这个站|這個站).{0,24}(技术|技術|技术栈|技術棧|栈|棧)|网站用了哪些|網站用了哪些|本站用了|本站技术|本站技術/.test(
+      q,
+    )
+  ) {
+    return "site_stack";
+  }
   if (/next\.?js|为什么选|為何選|选型|選型/.test(q)) return "nextjs";
   if (/性能|效能|优化|優化|lcp|cls|白屏|虚拟列表|虛擬列表/.test(q)) {
     return "performance";
@@ -144,6 +152,16 @@ function answerProjects(): string {
   return lines.join("\n").trim();
 }
 
+/** Focused answer for「这个个人网站用了哪些技术」 */
+function answerSiteStack(): string {
+  const sections = parseH2Sections(sourceText("projects.md"));
+  const site = sections.find((s) => /Personal|本站|Knowledge Platform/i.test(s.title));
+  if (!site) return "知识库里暂时没有本站技术栈说明。";
+
+  const lines: string[] = ["这个个人网站主要用这些技术：", "", ...bullets(site.body)];
+  return lines.join("\n").trim();
+}
+
 function answerNextjs(): string {
   const text = sourceText("nextjs.md");
   const points = text
@@ -241,6 +259,7 @@ export function buildLocalAnswer(question: string): {
 
   const intentSource: Record<Exclude<Intent, "general" | "out_of_scope">, string[]> = {
     projects: ["projects.md"],
+    site_stack: ["projects.md"],
     nextjs: ["nextjs.md"],
     performance: ["performance.md"],
     ai: ["ai.md"],
@@ -259,6 +278,16 @@ export function buildLocalAnswer(question: string): {
       sources = loadKnowledgeChunks()
         .filter((c) => c.source === "projects.md")
         .slice(0, 3);
+      break;
+    case "site_stack":
+      text = answerSiteStack();
+      sources = loadKnowledgeChunks()
+        .filter(
+          (c) =>
+            c.source === "projects.md" &&
+            /Personal|本站|Knowledge Platform/i.test(c.title),
+        )
+        .slice(0, 2);
       break;
     case "nextjs":
       text = answerNextjs();
@@ -338,6 +367,7 @@ export async function* streamLlmAnswer(question: string) {
   const retrieval = await retrieveDetailedAsync(question, 5);
   const preferred: Record<string, string[]> = {
     projects: ["projects.md"],
+    site_stack: ["projects.md"],
     nextjs: ["nextjs.md", "projects.md"],
     performance: ["performance.md"],
     ai: ["ai.md"],

@@ -13,14 +13,14 @@ export const timeline: TimelineNode[] = [
     year: "2022",
     title: "Enterprise Systems",
     keywords: ["Vue2", "Element-UI", "ECharts", "权限后台"],
-    note: "ToB 后台交付：授权管理、数据看板与模块化页面。",
+    note: "晟为数科早期 ToB：授权管理、设备运维、应用运营后台。",
   },
   {
     id: "2024",
     year: "2024",
     title: "AI Application",
     keywords: ["SSE", "WebSocket", "uni-app", "Payment", "Multi-platform"],
-    note: "ChatAI 多端：流式对话、登录支付与多端发布。",
+    note: "同司 ChatAI 多端：流式对话、登录支付与多端发布。",
   },
   {
     id: "2025",

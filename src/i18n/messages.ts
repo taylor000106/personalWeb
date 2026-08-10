@@ -140,7 +140,7 @@ export const messages: Record<Locale, Messages> = {
     archive: {
       eyebrow: "Earlier work",
       title: "更多项目",
-      subtitle: "早期 ToB 交付归档，不占用 Featured 主叙事",
+      subtitle: "晟为数科时期 ToB 交付归档，不占用 Featured 主叙事",
     },
     experience: {
       title: "Experience",
@@ -254,7 +254,7 @@ export const messages: Record<Locale, Messages> = {
     archive: {
       eyebrow: "Earlier work",
       title: "More projects",
-      subtitle: "Earlier ToB delivery — archived, outside the Featured narrative",
+      subtitle: "Shengwei-era ToB delivery — archived, outside the Featured narrative",
     },
     experience: {
       title: "Experience",
