@@ -21,6 +21,8 @@ services:
       - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./deploy/nginx/conf.d:/etc/nginx/conf.d:ro
       - /root/.acme.sh/yywtaylor.cyou_ecc:/etc/nginx/ssl:ro
+      # 演示站静态文件：由 workbuddy scripts/deploy-demo.ps1 上传到此目录
+      - /root/workbuddy-demo:/usr/share/nginx/html/workbuddy:ro
     depends_on:
       - web
     networks:
