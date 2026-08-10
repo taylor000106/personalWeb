@@ -20,7 +20,7 @@ export const vitalMetrics: VitalMetric[] = [
     label: "LCP",
     value: "< 2.5s",
     metricKey: "LCP",
-    hint: "目标阈值。会话实测见「实测」标签；生产 Lighthouse 首页 LCP 约 2.3s（mobile，2026-08-10）",
+    hint: "目标阈值。会话实测见「实测」标签；生产 Lighthouse 首页 LCP 约 2.6s（mobile，2026-08-10 复测）",
     status: "target",
   },
   {
@@ -58,7 +58,7 @@ export const lighthouseSnapshot = {
     {
       path: "/",
       label: "Home",
-      performance: 96,
+      performance: 95,
       accessibility: 96,
       bestPractices: 96,
       seo: 100,
@@ -66,7 +66,7 @@ export const lighthouseSnapshot = {
     {
       path: "/assistant",
       label: "Assistant",
-      performance: 100,
+      performance: 99,
       accessibility: 96,
       bestPractices: 96,
       seo: 100,
@@ -74,7 +74,7 @@ export const lighthouseSnapshot = {
     {
       path: "/lab",
       label: "Lab",
-      performance: 62,
+      performance: 48,
       accessibility: 95,
       bestPractices: 93,
       seo: 100,

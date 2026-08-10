@@ -32,14 +32,14 @@ Next.js 15 · React 19 · TypeScript · Tailwind CSS · SQLite · JWT · Zod · 
 2. **全栈可上线**：鉴权、CRUD、限流、standalone Docker 部署，具备生产项目基本规范。
 3. **AI 可讲深**：检索边界、SSE 可中断、推荐问题与可点击引用、本地 / LLM 双模式；表述诚实，避免「套壳聊天」。
 4. **工程化完整**：lint-staged、单测、CI 阻断不合格格式 / 测试，再部署。
-5. **性能有实测**：生产站 Lighthouse（mobile，2026-08-10）：首页 Performance **96** / A11y **96** / Best Practices **96** / SEO **100**；`/assistant` Performance **100**。Lab 为实验集合页，Performance **62**（TBT 偏高），不作为首屏 KPI。首页另有 `web-vitals` 会话实测 LCP/CLS/INP。
+5. **性能有实测**：生产站 Lighthouse（mobile，2026-08-10 复测）：首页 Performance **95** / A11y **96** / Best Practices **96** / SEO **100**；`/assistant` Performance **99**。Lab 为实验集合页，Performance **48**（TBT 偏高），不作为首屏 KPI。首页另有 `web-vitals` 会话实测 LCP/CLS/INP。
 
 ---
 
 ## 一句话版本（项目列表用）
 
-Next.js 15 + React 19 全栈个人技术平台：Portfolio + Lab + 知识库 AI 助手（SSE）+ SQLite 后台，含鉴权限流、Docker / Actions 部署；生产 Lighthouse 首页 Performance 96、SEO 100。
+Next.js 15 + React 19 全栈个人技术平台：Portfolio + Lab + 知识库 AI 助手（SSE）+ SQLite 后台，含鉴权限流、Docker / Actions 部署；生产 Lighthouse 首页 Performance 95、SEO 100。
 
 ## 面试口述提纲（30 秒）
 
-我做了一个已上线的个人前端技术平台。公开侧是作品集、工程 Lab、文章，以及基于 Markdown 知识库的 AI 助手（本地混合检索 + SSE，可切 LLM）；私有侧是 JWT + SQLite 面板。整站有测试、CI 和 Docker 部署。性能上我对生产域名跑过 Lighthouse：首页四维都在 96–100，Assistant 性能 100；Lab 因为重 Demo 主线程占用更高，我会分开讲优化边界。
+我做了一个已上线的个人前端技术平台。公开侧是作品集、工程 Lab、文章，以及基于 Markdown 知识库的 AI 助手（本地混合检索 + SSE，可切 LLM）；私有侧是 JWT + SQLite 面板。整站有测试、CI 和 Docker 部署。性能上我对生产域名跑过 Lighthouse：首页四维约 95–100，Assistant 性能接近满分；Lab 因为重 Demo 主线程占用更高，我会分开讲优化边界。
