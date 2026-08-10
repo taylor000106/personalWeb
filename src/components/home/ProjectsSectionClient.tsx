@@ -37,7 +37,7 @@ export function ProjectsSectionClient({
               }}
               aria-hidden
             />
-            <div className="grid gap-6 p-6 md:grid-cols-[minmax(0,1fr)_200px] md:p-8">
+            <div className="grid gap-6 p-6 md:grid-cols-[minmax(0,1.2fr)_minmax(220px,0.9fr)] md:p-8">
               <div>
                 <div className="flex flex-wrap items-center gap-3">
                   <span className="font-display text-xs text-zinc-500">
@@ -51,53 +51,61 @@ export function ProjectsSectionClient({
                   ) : null}
                 </div>
                 <h3 className="mt-2 font-display text-xl font-semibold text-white">
-                  {project.title}
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="transition-colors hover:text-violet-200"
+                  >
+                    {project.title}
+                  </Link>
                 </h3>
-                {project.titleEn ? (
-                  <p className="mt-1 text-sm text-zinc-500">
-                    {locale === "zh" ? project.titleEn : null}
-                  </p>
+                {project.titleEn && locale === "zh" ? (
+                  <p className="mt-1 text-sm text-zinc-500">{project.titleEn}</p>
                 ) : null}
                 <p className="mt-3 text-sm leading-relaxed text-zinc-400">
                   {project.summary}
                 </p>
                 <ul className="mt-4 space-y-2 text-sm text-zinc-400">
-                  {project.highlights.map((item) => (
+                  {project.highlights.slice(0, 2).map((item) => (
                     <li key={item} className="flex gap-2">
                       <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
                       <span>{item}</span>
                     </li>
                   ))}
                 </ul>
-                {project.links?.length ? (
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {project.links.map((link) =>
-                      link.href.startsWith("/") ? (
-                        <Link
-                          key={link.href + link.label}
-                          href={link.href}
-                          className="text-sm font-medium text-violet-300 hover:text-violet-200"
-                        >
-                          {link.label} →
-                        </Link>
-                      ) : (
-                        <a
-                          key={link.href + link.label}
-                          href={link.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm font-medium text-violet-300 hover:text-violet-200"
-                        >
-                          {link.label} →
-                        </a>
-                      ),
-                    )}
-                  </div>
-                ) : null}
+                <div className="mt-5 flex flex-wrap items-center gap-4">
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="text-sm font-medium text-violet-300 hover:text-violet-200"
+                  >
+                    {t.projects.viewDetail} →
+                  </Link>
+                  {project.links?.slice(0, 1).map((link) =>
+                    link.href.startsWith("/") ? (
+                      <Link
+                        key={link.href + link.label}
+                        href={link.href}
+                        className="text-sm text-zinc-500 hover:text-zinc-300"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        key={link.href + link.label}
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-zinc-500 hover:text-zinc-300"
+                      >
+                        {link.label}
+                      </a>
+                    ),
+                  )}
+                </div>
               </div>
               <div className="flex flex-col justify-between gap-4">
-                <div
-                  className="relative aspect-[4/3] overflow-hidden border border-white/10 md:aspect-auto md:min-h-[140px]"
+                <Link
+                  href={`/projects/${project.id}`}
+                  className="relative aspect-[16/10] overflow-hidden border border-white/10 md:min-h-[180px]"
                   style={
                     cover
                       ? undefined
@@ -112,7 +120,7 @@ export function ProjectsSectionClient({
                       alt={project.title}
                       fill
                       className="object-cover object-top"
-                      sizes="200px"
+                      sizes="(max-width: 768px) 100vw, 360px"
                     />
                   ) : (
                     <div className="absolute inset-0 flex flex-col justify-end p-4">
@@ -121,9 +129,9 @@ export function ProjectsSectionClient({
                       </span>
                     </div>
                   )}
-                </div>
+                </Link>
                 <ul className="flex flex-wrap gap-1.5">
-                  {project.tech.map((tag) => (
+                  {project.stack.slice(0, 5).map((tag) => (
                     <li
                       key={tag}
                       className="border border-white/10 px-2 py-0.5 text-[11px] text-zinc-400"

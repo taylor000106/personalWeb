@@ -11,11 +11,34 @@ export type Messages = {
     assistant: string;
   };
   hero: {
-    focusLabel: string;
     ctaProjects: string;
     ctaLab: string;
   };
-  projects: { title: string; subtitle: string; screenshotTbd: string };
+  projects: {
+    title: string;
+    subtitle: string;
+    screenshotTbd: string;
+    viewDetail: string;
+    back: string;
+    background: string;
+    challenge: string;
+    contribution: string;
+    engineering: string;
+    stack: string;
+    architecture: string;
+    heroCaption: string;
+    screenshots: string;
+    architectureDiagram: string;
+    engPerformance: string;
+    engTesting: string;
+    engDeployment: string;
+    engSecurity: string;
+  };
+  archive: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+  };
   experience: { title: string; subtitle: string };
   labPreview: {
     eyebrow: string;
@@ -91,21 +114,40 @@ export const messages: Record<Locale, Messages> = {
       assistant: "AI助手",
     },
     hero: {
-      focusLabel: "专注于",
       ctaProjects: "Explore Projects",
-      ctaLab: "Visit Lab",
+      ctaLab: "Explore Lab",
     },
     projects: {
       title: "Featured Projects",
       subtitle: "代表交付：本站平台、AI 多端产品、ToB SaaS",
       screenshotTbd: "截图待补充",
+      viewDetail: "查看详情",
+      back: "返回项目",
+      background: "项目背景",
+      challenge: "核心挑战",
+      contribution: "我的贡献",
+      engineering: "工程实践",
+      stack: "技术栈",
+      architecture: "架构选择原因",
+      heroCaption: "产品界面",
+      screenshots: "更多截图",
+      architectureDiagram: "架构示意",
+      engPerformance: "性能",
+      engTesting: "测试",
+      engDeployment: "部署",
+      engSecurity: "安全",
+    },
+    archive: {
+      eyebrow: "Earlier work",
+      title: "更多项目",
+      subtitle: "早期 ToB 交付归档，不占用 Featured 主叙事",
     },
     experience: {
       title: "Experience",
       subtitle: "能力时间轴：从企业后台到 AI 应用，再到现代全栈平台",
     },
     labPreview: {
-      eyebrow: "Frontend Lab",
+      eyebrow: "Frontend Engineering Lab",
       title: "前端实验室",
       subtitle:
         "记录有趣的交互效果、动画实验与技术探索。部分灵感来自社区作品，重在审美、交互与工程拆解，而非包装成原创作品集。",
@@ -187,21 +229,40 @@ export const messages: Record<Locale, Messages> = {
       assistant: "AI Assistant",
     },
     hero: {
-      focusLabel: "Focus",
       ctaProjects: "Explore Projects",
-      ctaLab: "Visit Lab",
+      ctaLab: "Explore Lab",
     },
     projects: {
       title: "Featured Projects",
       subtitle: "This platform, ChatAI multi-end, and WeCom SaaS delivery",
       screenshotTbd: "Screenshot TBD",
+      viewDetail: "View details",
+      back: "Back to projects",
+      background: "Background",
+      challenge: "Challenges",
+      contribution: "My contribution",
+      engineering: "Engineering practice",
+      stack: "Stack",
+      architecture: "Architecture decisions",
+      heroCaption: "Product UI",
+      screenshots: "Screenshots",
+      architectureDiagram: "Architecture",
+      engPerformance: "Performance",
+      engTesting: "Testing",
+      engDeployment: "Deployment",
+      engSecurity: "Security",
+    },
+    archive: {
+      eyebrow: "Earlier work",
+      title: "More projects",
+      subtitle: "Earlier ToB delivery — archived, outside the Featured narrative",
     },
     experience: {
       title: "Experience",
       subtitle: "Capability timeline: enterprise systems → AI apps → modern full-stack",
     },
     labPreview: {
-      eyebrow: "Frontend Lab",
+      eyebrow: "Frontend Engineering Lab",
       title: "Frontend Experiments",
       subtitle:
         "Interactive UI experiments and frontend explorations. Some pieces are community-inspired; the point is taste, interaction, and engineering notes — not claiming original art direction.",

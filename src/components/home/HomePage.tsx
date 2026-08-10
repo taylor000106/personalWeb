@@ -1,3 +1,4 @@
+import { ArchiveSection } from "./ArchiveSection";
 import { ArticlesSection } from "./ArticlesSection";
 import { ContactSection } from "./ContactSection";
 import { ExperienceSection } from "./ExperienceSection";
@@ -12,6 +13,7 @@ export function HomePage() {
     <div className="relative min-h-screen overflow-hidden bg-[#05050c] text-white">
       <HeroSection />
       <ProjectsSection />
+      <ArchiveSection />
       <ExperienceSection />
       <VitalsSection />
       <LabPreviewSection />

@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { LanguageToggle } from "@/components/ui/LanguageToggle";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import { profile } from "@/content/profile";
 import { useI18n } from "@/i18n/LanguageProvider";
 
@@ -20,35 +20,7 @@ export function HeroSection() {
       <ParticleCanvas />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.18),transparent_55%)]" />
 
-      <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-12">
-        <span className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-violet-300">
-          {profile.name}
-        </span>
-        <nav className="flex items-center gap-3 text-sm sm:gap-4">
-          <a
-            href="#projects"
-            className="text-zinc-400 transition-colors hover:text-white"
-          >
-            {t.nav.projects}
-          </a>
-          <Link href="/lab" className="text-zinc-400 transition-colors hover:text-white">
-            {t.nav.lab}
-          </Link>
-          <Link
-            href="/assistant"
-            className="hidden text-zinc-400 transition-colors hover:text-white sm:inline"
-          >
-            {t.nav.assistant}
-          </Link>
-          <LanguageToggle />
-          <Link
-            href="/login"
-            className="rounded-full bg-white px-4 py-2 font-medium text-black transition-colors hover:bg-violet-100"
-          >
-            {t.nav.login}
-          </Link>
-        </nav>
-      </header>
+      <SiteHeader variant="hero" />
 
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-6 pb-24 pt-16 text-center md:pt-24">
         <motion.h1
@@ -87,43 +59,9 @@ export function HeroSection() {
         </motion.p>
 
         <motion.div
-          initial={{ y: 12, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.26 }}
-          className="mt-8"
-        >
-          <p className="text-xs tracking-wider text-zinc-500 uppercase">
-            {t.hero.focusLabel}
-          </p>
-          <ul className="mt-3 flex flex-wrap justify-center gap-2">
-            {profile.focus.map((item) => (
-              <li
-                key={item}
-                className="border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm text-zinc-300"
-              >
-                {item}
-              </li>
-            ))}
-          </ul>
-        </motion.div>
-
-        <motion.ul
-          initial={{ y: 12, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.32 }}
-          className="mt-6 flex flex-wrap justify-center gap-2"
-        >
-          {profile.keywords.map((kw) => (
-            <li key={kw} className="px-2 text-xs tracking-wide text-zinc-500 uppercase">
-              {kw}
-            </li>
-          ))}
-        </motion.ul>
-
-        <motion.div
           initial={{ y: 16, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.55, delay: 0.38 }}
+          transition={{ duration: 0.55, delay: 0.28 }}
           className="mt-10 flex flex-wrap justify-center gap-4"
         >
           <a

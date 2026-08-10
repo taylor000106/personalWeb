@@ -8,7 +8,7 @@ export default function AssistantPage() {
   const { t } = useI18n();
 
   return (
-    <LabShell backHref="/" backLabel={t.nav.home}>
+    <LabShell>
       <main className="mx-auto max-w-5xl px-6 py-10 md:py-14">
         <div className="mb-8 max-w-2xl">
           <p className="text-sm font-medium text-violet-300">{t.assistant.eyebrow}</p>

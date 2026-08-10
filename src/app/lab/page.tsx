@@ -9,7 +9,7 @@ export default function LabIndexPage() {
   const { t } = useI18n();
 
   return (
-    <LabShell backHref="/" backLabel={t.nav.home}>
+    <LabShell>
       <main className="mx-auto max-w-6xl px-6 py-10 md:py-14">
         <div className="mb-10 max-w-2xl">
           <p className="text-sm font-medium text-violet-300">{t.lab.eyebrow}</p>

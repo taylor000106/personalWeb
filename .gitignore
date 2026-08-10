@@ -43,14 +43,21 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# local extract / scratch
+/_tmp/
+
 # scripts (keep useful helpers tracked; ignore one-off patch scripts)
 scripts/*
 !scripts/hash-password.mjs
 !scripts/analyze.mjs
 !scripts/lighthouse-hint.mjs
+!scripts/redact-project-covers.py
 *.mjs
 !scripts/hash-password.mjs
 !scripts/analyze.mjs
 !scripts/lighthouse-hint.mjs
 !eslint.config.mjs
 !vitest.config.mts
+
+# unredacted project screenshots (never commit)
+/public/projects/_raw/
