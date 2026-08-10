@@ -16,6 +16,14 @@ SSE / WebSocket 流式对话、一键登录、微信/支付宝/Apple Pay、多�
 Vue3 + TypeScript + Element Plus + Vant + Pinia。
 企微营销 SaaS：客户运营、营销任务、数据统计、员工小店、AI 托管；PC 运营后台与 H5。
 
-## prm 铠大师（早期）
+## PRM · License & Channel Admin（早期）
 
-Vue2 + Element-UI + ECharts。信创授权后台：权限、订单、看板。
+Vue2 + Element-UI + ECharts。授权与渠道管理后台：代理商层级、激活码库存、订单与角色权限。
+
+## KMS Console · Device Ops（早期）
+
+设备终端运维：设备管理、镜像、KMS 激活、策略与权限管控。
+
+## ToC CMS · App Catalog Admin（早期）
+
+应用上架与运营配置：分类、轮播、热门推荐、活动码、设备与反馈。

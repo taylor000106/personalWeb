@@ -51,7 +51,9 @@ function detectIntent(question: string): Intent {
   if (/\bai\b|人工智能|大模型|sse|流式|对话|對話|embedding|知识库|助手/.test(q)) {
     return "ai";
   }
-  if (/项目|專案|作品|linkwechat|chatai|铠大师|鎧大師|personal-web|scrm|企微/.test(q)) {
+  if (
+    /项目|專案|作品|linkwechat|chatai|prm|kms|personal-web|scrm|企微|授权|控制台/.test(q)
+  ) {
     return "projects";
   }
   if (/介绍|介紹|你是谁|你是誰|关于你|關於你|经历|經歷|背景/.test(q)) return "about";
@@ -139,7 +141,7 @@ function answerProjects(): string {
 
   const lines: string[] = ["我近年主要项目可以这样看：", ""];
   for (const section of sections) {
-    if (/铠大师|早期/.test(section.title)) continue;
+    if (/早期|授权|渠道|控制台|PRM|KMS|ToC/.test(section.title)) continue;
     lines.push(`**${section.title}**`);
     lines.push(section.body.replace(/\n+/g, " ").trim());
     lines.push("");
