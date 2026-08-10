@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { vitalMetrics, vitalsPractices } from "@/content/vitals";
+import { lighthouseSnapshot, vitalMetrics, vitalsPractices } from "@/content/vitals";
 import {
   formatVital,
   readStoredVitals,
@@ -12,7 +12,7 @@ import { useI18n } from "@/i18n/LanguageProvider";
 type Stored = Record<string, { value: number; rating: string; at: number }>;
 
 export function VitalsSection() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [live, setLive] = useState<Stored>({});
 
   useEffect(() => {
@@ -25,6 +25,8 @@ export function VitalsSection() {
     window.addEventListener("pw:vitals", onUpdate);
     return () => window.removeEventListener("pw:vitals", onUpdate);
   }, []);
+
+  const isZh = locale === "zh";
 
   return (
     <section id="vitals" className="relative z-10 mx-auto max-w-5xl px-6 py-20">
@@ -66,6 +68,49 @@ export function VitalsSection() {
             </div>
           );
         })}
+      </div>
+
+      <div className="mt-10 border border-white/10 bg-white/[0.03] p-5">
+        <p className="text-[11px] tracking-[0.16em] text-violet-300/80 uppercase">
+          {t.vitals.lighthouseEyebrow}
+        </p>
+        <p className="mt-2 text-sm text-zinc-400">{t.vitals.lighthouseNote}</p>
+        <p className="mt-2 text-xs text-zinc-600">
+          {lighthouseSnapshot.origin} · {lighthouseSnapshot.formFactor} ·{" "}
+          {lighthouseSnapshot.tool} · {lighthouseSnapshot.testedAt}
+        </p>
+        <div className="mt-4 overflow-x-auto">
+          <table className="w-full min-w-[480px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 text-xs text-zinc-500">
+                <th className="py-2 pr-3 font-medium">Page</th>
+                <th className="py-2 pr-3 font-medium">Perf</th>
+                <th className="py-2 pr-3 font-medium">A11y</th>
+                <th className="py-2 pr-3 font-medium">BP</th>
+                <th className="py-2 font-medium">SEO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lighthouseSnapshot.pages.map((page) => (
+                <tr key={page.path} className="border-b border-white/5 text-zinc-300">
+                  <td className="py-2.5 pr-3">
+                    <span className="text-zinc-200">{page.label}</span>
+                    <span className="ml-2 text-xs text-zinc-600">{page.path}</span>
+                  </td>
+                  <td className="py-2.5 pr-3 font-display">{page.performance}</td>
+                  <td className="py-2.5 pr-3 font-display">{page.accessibility}</td>
+                  <td className="py-2.5 pr-3 font-display">{page.bestPractices}</td>
+                  <td className="py-2.5 font-display">{page.seo}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="mt-3 text-xs text-zinc-600">
+          {isZh
+            ? "Lab Performance 偏低主要来自实验页主线程占用（TBT），不作为作品集首屏 KPI。"
+            : "Lab Performance is lower due to demo-page main-thread cost (TBT); not a homepage KPI."}
+        </p>
       </div>
 
       <ul className="mt-8 space-y-2 text-sm text-zinc-500">

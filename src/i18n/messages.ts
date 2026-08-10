@@ -55,6 +55,8 @@ export type Messages = {
     live: string;
     waiting: string;
     labHint: string;
+    lighthouseEyebrow: string;
+    lighthouseNote: string;
   };
   lab: {
     eyebrow: string;
@@ -164,11 +166,15 @@ export const messages: Record<Locale, Messages> = {
     },
     vitals: {
       title: "Web Vitals",
-      subtitle: "目标阈值 + 本会话实测（web-vitals）。交互后会出现 LCP / CLS / INP。",
+      subtitle:
+        "上方：目标阈值 + 本会话 web-vitals 实测。下方：生产站 Lighthouse 归档分数（非模拟）。",
       target: "目标",
       live: "实测",
       waiting: "浏览页面后自动采集",
       labHint: "性能 Demo 见",
+      lighthouseEyebrow: "Lighthouse · production",
+      lighthouseNote:
+        "在 yywtaylor.cyou 用 Lighthouse CLI（mobile）实测四维分数；完整记录见仓库 docs/lighthouse.md。",
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",
@@ -278,11 +284,15 @@ export const messages: Record<Locale, Messages> = {
     },
     vitals: {
       title: "Web Vitals",
-      subtitle: "Targets + live session metrics via web-vitals (LCP / CLS / INP).",
+      subtitle:
+        "Above: targets + live session web-vitals. Below: archived production Lighthouse scores (not mocked).",
       target: "Target",
       live: "Live",
       waiting: "Interact with the page to collect",
       labHint: "Performance demos at",
+      lighthouseEyebrow: "Lighthouse · production",
+      lighthouseNote:
+        "Scores from Lighthouse CLI (mobile) against yywtaylor.cyou. Full notes in docs/lighthouse.md.",
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",
