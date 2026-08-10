@@ -1,6 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useRef, useState } from "react";
+import {
+  resolveSourceLinks,
+  type ResolvedSourceLink,
+} from "@/content/knowledge/source-links";
 import { useI18n } from "@/i18n/LanguageProvider";
 
 type ChatItem = {
@@ -10,18 +15,24 @@ type ChatItem = {
 };
 
 const SUGGESTIONS_ZH = [
-  "介绍一下你的项目",
-  "你为什么选择 Next.js",
-  "你的性能优化经验有哪些",
-  "你的 AI 应用经验是什么",
+  "介绍一下 Taylor 的技术方向？",
+  "这个个人网站用了哪些技术？",
+  "为什么选择 Next.js 开发这个项目？",
 ];
 
 const SUGGESTIONS_EN = [
-  "Introduce your projects",
-  "Why did you choose Next.js?",
-  "What performance work have you done?",
-  "What is your AI experience?",
+  "What is Taylor's technical focus?",
+  "What tech stack does this site use?",
+  "Why was this project built with Next.js?",
 ];
+
+/** Strip legacy footer so UI owns citations */
+function stripLegacySourceFooter(text: string) {
+  return text
+    .replace(/\n*---\n+\*\*参考知识库\*\*[\s\S]*$/i, "")
+    .replace(/\n*---\n+\*\*Sources?\*\*[\s\S]*$/i, "")
+    .trim();
+}
 
 function renderLiteMarkdown(text: string) {
   const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -32,6 +43,99 @@ function renderLiteMarkdown(text: string) {
     .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
     .replace(/`([^`]+)`/g, "<code>$1</code>")
     .replace(/\n/g, "<br/>");
+}
+
+function SourceRefs({ links }: { links: ResolvedSourceLink[] }) {
+  const { locale } = useI18n();
+  if (links.length === 0) return null;
+  return (
+    <div className="mt-3 border-t border-white/10 pt-3">
+      <p className="text-[11px] tracking-[0.16em] text-zinc-500 uppercase">
+        {locale === "zh" ? "参考资料" : "References"}
+      </p>
+      <ul className="mt-2 flex flex-wrap gap-2">
+        {links.map((link) => (
+          <li key={`${link.title}-${link.href || "text"}`}>
+            {link.href ? (
+              <Link
+                href={link.href}
+                className="inline-flex border border-violet-400/35 bg-violet-500/10 px-2.5 py-1 text-xs text-violet-100 transition-colors hover:border-violet-300/60 hover:bg-violet-500/20"
+              >
+                {link.title}
+              </Link>
+            ) : (
+              <span className="inline-flex border border-white/10 px-2.5 py-1 text-xs text-zinc-400">
+                {link.title}
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function EmptyWelcome({
+  suggestions,
+  onAsk,
+  disabled,
+}: {
+  suggestions: string[];
+  onAsk: (q: string) => void;
+  disabled: boolean;
+}) {
+  const { locale } = useI18n();
+  const isZh = locale === "zh";
+
+  return (
+    <div className="flex min-h-[280px] flex-col justify-center gap-6 py-4">
+      <div className="space-y-3">
+        <p className="text-base font-medium text-zinc-100">
+          {isZh
+            ? "你好，我是 Taylor 的技术助手。"
+            : "Hi — I'm Taylor's technical assistant."}
+        </p>
+        <p className="text-sm leading-relaxed text-zinc-400">
+          {isZh
+            ? "我基于本站知识库回答，帮助访客快速了解："
+            : "I answer from this site's knowledge base so visitors can quickly learn about:"}
+        </p>
+        <ul className="space-y-1.5 text-sm text-zinc-300">
+          <li className="flex gap-2">
+            <span className="text-violet-400">·</span>
+            {isZh ? "项目经历" : "Project experience"}
+          </li>
+          <li className="flex gap-2">
+            <span className="text-violet-400">·</span>
+            {isZh ? "技术方向" : "Technical focus"}
+          </li>
+          <li className="flex gap-2">
+            <span className="text-violet-400">·</span>
+            {isZh ? "网站实现" : "How this site is built"}
+          </li>
+        </ul>
+      </div>
+
+      <div>
+        <p className="text-[11px] tracking-[0.16em] text-zinc-500 uppercase">
+          {isZh ? "推荐问题" : "Suggested questions"}
+        </p>
+        <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+          {suggestions.map((s) => (
+            <button
+              key={s}
+              type="button"
+              disabled={disabled}
+              onClick={() => onAsk(s)}
+              className="border border-white/15 bg-white/[0.03] px-3 py-2.5 text-left text-sm text-zinc-200 transition-colors hover:border-violet-400/45 hover:bg-violet-500/10 hover:text-white disabled:opacity-50"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export function AssistantChat() {
@@ -173,52 +277,58 @@ export function AssistantChat() {
         ) : null}
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {suggestions.map((s) => (
-          <button
-            key={s}
-            type="button"
-            disabled={streaming}
-            onClick={() => ask(s)}
-            className="rounded-full border border-white/15 px-3 py-1.5 text-xs text-zinc-300 transition-colors hover:border-violet-400/50 hover:text-white disabled:opacity-50"
-          >
-            {s}
-          </button>
-        ))}
-      </div>
-
       <div className="min-h-[320px] space-y-4 rounded-2xl border border-white/10 bg-[#080814] p-4 md:p-6">
         {items.length === 0 ? (
-          <p className="text-sm text-zinc-500">{t.assistant.empty}</p>
+          <EmptyWelcome
+            suggestions={suggestions}
+            onAsk={(q) => void ask(q)}
+            disabled={streaming}
+          />
         ) : (
-          items.map((item, idx) => (
-            <div
-              key={`${item.role}-${idx}`}
-              className={item.role === "user" ? "text-right" : "text-left"}
-            >
+          items.map((item, idx) => {
+            const body =
+              item.role === "assistant"
+                ? stripLegacySourceFooter(item.content)
+                : item.content;
+            const links =
+              item.role === "assistant" && item.sources?.length
+                ? resolveSourceLinks(item.sources)
+                : [];
+            const showSources =
+              item.role === "assistant" &&
+              links.length > 0 &&
+              !(streaming && idx === items.length - 1);
+
+            return (
               <div
-                className={
-                  item.role === "user"
-                    ? "inline-block max-w-[90%] rounded-2xl bg-violet-600 px-4 py-2 text-sm text-white"
-                    : "inline-block max-w-[95%] rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-200"
-                }
+                key={`${item.role}-${idx}`}
+                className={item.role === "user" ? "text-right" : "text-left"}
               >
-                {item.role === "assistant" ? (
-                  <div
-                    className="assistant-md leading-relaxed [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_h1]:mb-2 [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:text-base [&_h2]:font-semibold [&_h3]:mb-1 [&_h3]:font-medium"
-                    dangerouslySetInnerHTML={{
-                      __html: renderLiteMarkdown(item.content),
-                    }}
-                  />
-                ) : (
-                  item.content
-                )}
-                {streaming && idx === items.length - 1 && item.role === "assistant" ? (
-                  <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-violet-400 align-middle" />
-                ) : null}
+                <div
+                  className={
+                    item.role === "user"
+                      ? "inline-block max-w-[90%] rounded-2xl bg-violet-600 px-4 py-2 text-sm text-white"
+                      : "inline-block max-w-[95%] rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-zinc-200"
+                  }
+                >
+                  {item.role === "assistant" ? (
+                    <div
+                      className="assistant-md leading-relaxed [&_code]:rounded [&_code]:bg-white/10 [&_code]:px-1 [&_h1]:mb-2 [&_h1]:text-lg [&_h1]:font-semibold [&_h2]:mb-2 [&_h2]:text-base [&_h2]:font-semibold [&_h3]:mb-1 [&_h3]:font-medium"
+                      dangerouslySetInnerHTML={{
+                        __html: renderLiteMarkdown(body),
+                      }}
+                    />
+                  ) : (
+                    item.content
+                  )}
+                  {streaming && idx === items.length - 1 && item.role === "assistant" ? (
+                    <span className="ml-1 inline-block h-4 w-1 animate-pulse bg-violet-400 align-middle" />
+                  ) : null}
+                  {showSources ? <SourceRefs links={links} /> : null}
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 

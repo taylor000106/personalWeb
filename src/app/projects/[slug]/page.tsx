@@ -41,12 +41,7 @@ export default async function ProjectDetailPage({ params }: PageProps) {
 
   return (
     <LabShell>
-      <ProjectDetailView
-        project={project}
-        cover={cover}
-        gallery={gallery}
-        architectureDiagram={resolvePublic(project.architectureDiagram)}
-      />
+      <ProjectDetailView project={project} cover={cover} gallery={gallery} />
     </LabShell>
   );
 }

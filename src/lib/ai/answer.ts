@@ -115,12 +115,6 @@ function uniqueSources(chunks: KnowledgeChunk[]) {
   return out.slice(0, 4);
 }
 
-function withSources(answer: string, sources: Array<{ title: string; source: string }>) {
-  if (sources.length === 0) return answer;
-  const lines = sources.map((s) => `- ${s.title}（${s.source}）`);
-  return `${answer.trim()}\n\n---\n**参考知识库**\n${lines.join("\n")}`;
-}
-
 function answerOutOfScope(): string {
   return [
     "这个问题超出了我当前知识库的范围。",
@@ -308,7 +302,7 @@ export function buildLocalAnswer(question: string): {
 
   const metaSources = uniqueSources(sources);
   return {
-    text: inScope ? withSources(text, metaSources) : text,
+    text,
     meta: {
       mode: "local",
       retrieval: inScope ? retrieval : "none",
@@ -422,12 +416,6 @@ export async function* streamLlmAnswer(question: string) {
       if (!trimmed.startsWith("data:")) continue;
       const data = trimmed.slice(5).trim();
       if (data === "[DONE]") {
-        if (sources.length > 0) {
-          yield {
-            type: "text" as const,
-            text: `\n\n---\n**参考知识库**\n${sources.map((s) => `- ${s.title}（${s.source}）`).join("\n")}`,
-          };
-        }
         return;
       }
       try {

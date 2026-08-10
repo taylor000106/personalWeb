@@ -37,8 +37,6 @@ export type ProjectItem = {
   cover?: string;
   /** Extra screenshots on detail page (not duplicated as cover) */
   gallery?: ProjectMedia[];
-  /** Optional architecture diagram */
-  architectureDiagram?: string;
   accent: string;
   featured: boolean;
   live?: boolean;
@@ -179,6 +177,20 @@ export const projects: ProjectItem[] = [
       security: ["权限与菜单可见性按角色控制；表单与接口层统一校验，减少脏数据入库。"],
     },
     cover: "/projects/scrm.webp",
+    gallery: [
+      {
+        src: "/projects/scrm-tasks.webp",
+        caption: "营销任务 · 周期状态与筛选",
+      },
+      {
+        src: "/projects/scrm-analytics.webp",
+        caption: "数据统计 · 卡片 + ECharts",
+      },
+      {
+        src: "/projects/scrm-customers.webp",
+        caption: "客户运营 · 标签与用户列表",
+      },
+    ],
     accent: "#5b21b6",
     featured: true,
   },

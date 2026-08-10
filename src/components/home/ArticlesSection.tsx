@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { articles } from "@/content/articles";
+import { articleHref, articles } from "@/content/articles";
 import { useI18n } from "@/i18n/LanguageProvider";
 
 export function ArticlesSection() {
@@ -17,35 +17,56 @@ export function ArticlesSection() {
       </p>
 
       <div className="mt-10 grid gap-4 md:grid-cols-3">
-        {articles.map((article) => (
-          <Link
-            key={article.id}
-            href={article.href}
-            className="border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <ul className="flex flex-wrap gap-1.5">
-                {article.tags.map((tag) => (
-                  <li
-                    key={tag}
-                    className="text-[10px] tracking-wide text-zinc-500 uppercase"
-                  >
-                    {tag}
-                  </li>
-                ))}
-              </ul>
-              {article.status === "soon" ? (
-                <span className="text-[10px] text-zinc-600">{t.articles.soon}</span>
-              ) : null}
-            </div>
-            <h3 className="mt-3 font-display text-base font-semibold text-white">
-              {locale === "zh" ? article.title : article.titleEn}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-zinc-500">
-              {locale === "zh" ? article.summary : article.summaryEn}
-            </p>
-          </Link>
-        ))}
+        {articles.map((article) => {
+          const href = articleHref(article.id);
+          const disabled = article.status === "soon";
+          const Card = (
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <ul className="flex flex-wrap gap-1.5">
+                  {article.tags.map((tag) => (
+                    <li
+                      key={tag}
+                      className="text-[10px] tracking-wide text-zinc-500 uppercase"
+                    >
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
+                {disabled ? (
+                  <span className="text-[10px] text-zinc-600">{t.articles.soon}</span>
+                ) : null}
+              </div>
+              <h3 className="mt-3 font-display text-base font-semibold text-white">
+                {locale === "zh" ? article.title : article.titleEn}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-zinc-500">
+                {locale === "zh" ? article.summary : article.summaryEn}
+              </p>
+            </>
+          );
+
+          if (disabled) {
+            return (
+              <div
+                key={article.id}
+                className="border border-white/10 bg-white/[0.03] p-5 opacity-60"
+              >
+                {Card}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={article.id}
+              href={href}
+              className="border border-white/10 bg-white/[0.03] p-5 transition-colors hover:border-white/20"
+            >
+              {Card}
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

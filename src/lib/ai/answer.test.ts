@@ -40,7 +40,8 @@ describe("buildLocalAnswer boundaries", () => {
     const { text, meta } = buildLocalAnswer("介绍一下你的项目");
     expect(meta.inScope).toBe(true);
     expect(text).toMatch(/项目|ChatAI|SCRM|Next/i);
-    expect(text).toMatch(/参考知识库/);
+    expect(meta.sources.length).toBeGreaterThan(0);
+    expect(text).not.toMatch(/参考知识库|\.md/);
   });
 
   it("rejects out-of-scope questions", () => {

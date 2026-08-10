@@ -2,7 +2,8 @@
 
 ## Personal AI Knowledge Platform（本站）
 
-Next.js 15 + React 19 + SQLite + JWT + Docker + GitHub Actions。
+技术栈：Next.js 15、React 19、TypeScript、SQLite、Docker、SSE。
+配套：JWT 鉴权、GitHub Actions、内容层 Markdown 知识库。
 展示 Developer Portfolio、Frontend Lab、安全登录与 AI Knowledge Assistant。
 定位：AI 时代前端工程师个人技术平台。
 

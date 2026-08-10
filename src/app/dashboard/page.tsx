@@ -61,7 +61,7 @@ export default function DashboardHome() {
         <InfoCard
           label="Articles 入口"
           value={`${content.articles.live} live`}
-          hint="编辑 src/content/articles.ts"
+          hint="编辑 src/content/articles/"
         />
       </div>
 

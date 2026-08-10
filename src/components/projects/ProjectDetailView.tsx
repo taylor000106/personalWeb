@@ -4,6 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ProjectItem, ProjectMedia } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
+import {
+  hasArchitectureDiagram,
+  ProjectArchitectureDiagram,
+} from "@/components/projects/ArchitectureDiagrams";
 
 function Section({
   eyebrow,
@@ -93,15 +97,14 @@ export function ProjectDetailView({
   project,
   cover,
   gallery,
-  architectureDiagram,
 }: {
   project: ProjectItem;
   cover: string | null;
   gallery: ProjectMedia[];
-  architectureDiagram: string | null;
 }) {
   const { t, locale } = useI18n();
   const eng = project.engineering;
+  const showArchitecture = hasArchitectureDiagram(project.id);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 md:py-14">
@@ -169,7 +172,7 @@ export function ProjectDetailView({
         </div>
       ) : null}
 
-      {(gallery.length > 0 || architectureDiagram) && (
+      {(gallery.length > 0 || showArchitecture) && (
         <div className="mt-10 space-y-6">
           {gallery.length > 0 ? (
             <section>
@@ -188,17 +191,12 @@ export function ProjectDetailView({
               </div>
             </section>
           ) : null}
-          {architectureDiagram ? (
+          {showArchitecture ? (
             <section>
               <p className="text-[11px] tracking-[0.18em] text-violet-300/80 uppercase">
                 {t.projects.architectureDiagram}
               </p>
-              <div className="mt-4">
-                <MediaFrame
-                  src={architectureDiagram}
-                  alt={`${project.title} architecture`}
-                />
-              </div>
+              <ProjectArchitectureDiagram projectId={project.id} />
             </section>
           ) : null}
         </div>

@@ -2,7 +2,14 @@
 
 我是 Taylor，前端工程师，约 4 年 Web 前端经验。
 
-## 技能方向
+## 技术方向
+
+- **Vue 经验**：Vue2 / Vue3、Pinia、Element Plus / Vant；企微 SCRM 与多端业务交付。
+- **React / Next.js 方向**：React 19、Next.js App Router、全栈作品集与工程化落地。
+- **AI 应用开发**：SSE / WebSocket 流式对话、知识库检索、本地 / LLM 双模式助手。
+- **工程化能力**：TypeScript、Vite、Docker、CI/CD、鉴权与接口校验、性能优化。
+
+## 技能清单
 
 - Vue3 / Vue2 / React / Next.js / TypeScript
 - uni-app 多端（小程序 / App / H5 / PC）

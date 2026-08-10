@@ -155,7 +155,7 @@ export const messages: Record<Locale, Messages> = {
     },
     articles: {
       title: "Articles",
-      subtitle: "Next.js · AI Application · Frontend Engineering",
+      subtitle: "技术迁移 · SSE 流式交互 · 全栈部署",
       soon: "撰写中",
     },
     contact: {
@@ -205,9 +205,8 @@ export const messages: Record<Locale, Messages> = {
       title: "AI助手",
       subtitle:
         "基于结构化 Markdown 知识库：本地混合检索（关键词 + 轻量向量）+ SSE；配置 AI_API_KEY 后可切 LLM，可选远程 Embedding。",
-      blurb: "问我：项目介绍、为什么选 Next.js、性能优化、AI 经验等。",
-      boundary:
-        "范围：仅本站相关的前端项目、技术选型、性能与 AI 实践；超出范围会明确说明。",
+      blurb: "基于本站知识库：了解项目经历、技术方向与网站实现。",
+      boundary: "范围：本站相关的项目、技术选型、性能与 AI 实践；超出范围会明确说明。",
       empty: "还没有对话，点下面建议问题或直接输入。",
       placeholder: "输入你的问题…",
       send: "发送",
@@ -270,7 +269,7 @@ export const messages: Record<Locale, Messages> = {
     },
     articles: {
       title: "Articles",
-      subtitle: "Next.js · AI Application · Frontend Engineering",
+      subtitle: "Migration · Streaming AI UX · Full-stack deploy",
       soon: "Soon",
     },
     contact: {
@@ -320,9 +319,9 @@ export const messages: Record<Locale, Messages> = {
       title: "AI Assistant",
       subtitle:
         "Structured Markdown knowledge base: local hybrid retrieval (keywords + light vectors) + SSE. Set AI_API_KEY for LLM; optional remote embeddings.",
-      blurb: "Ask about projects, Next.js choices, performance work, and AI experience.",
+      blurb: "Ask about project experience, technical focus, and how this site is built.",
       boundary:
-        "Scope: frontend projects, stack choices, performance, and AI practice on this site. Out-of-scope questions are declined clearly.",
+        "Scope: projects, stack choices, performance, and AI practice on this site. Out-of-scope questions are declined clearly.",
       empty: "No messages yet. Try a suggestion or type your question.",
       placeholder: "Ask a question...",
       send: "Send",
