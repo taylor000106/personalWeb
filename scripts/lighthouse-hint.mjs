@@ -5,10 +5,7 @@
  *   npm run lighthouse
  *   LIGHTHOUSE_URL=https://yywtaylor.cyou npm run lighthouse
  */
-const url = (process.env.LIGHTHOUSE_URL || "https://yywtaylor.cyou").replace(
-  /\/$/,
-  "",
-);
+const url = (process.env.LIGHTHOUSE_URL || "https://yywtaylor.cyou").replace(/\/$/, "");
 
 console.log(`
 Lighthouse checklist
