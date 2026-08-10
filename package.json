@@ -20,11 +20,11 @@
     "hash-password": "node scripts/hash-password.mjs"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{js,jsx,mjs,cjs,ts,tsx,mts,cts}": [
       "eslint --fix --max-warnings=0",
       "prettier --write"
     ],
-    "*.{json,md,css,yml,yaml}": [
+    "*.{json,md,css,yml,yaml,html}": [
       "prettier --write"
     ]
   },
