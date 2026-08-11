@@ -14,3 +14,26 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* Hero AI mock — stable blink cursor (SSE feel) */
+@keyframes hero-sse-cursor {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.hero-sse-cursor {
+  animation: hero-sse-cursor 1.1s step-end infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-sse-cursor {
+    animation: none;
+    display: none;
+  }
+}

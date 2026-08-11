@@ -13,6 +13,26 @@ export type Messages = {
   hero: {
     ctaProjects: string;
     ctaLab: string;
+    scrollCue: string;
+    previewEyebrow: string;
+    previewTitle: string;
+    previewAssistant: string;
+    previewAssistantHint: string;
+    previewChatAI: string;
+    previewChatAIHint: string;
+    previewScrM: string;
+    previewScrMHint: string;
+    previewUrl: string;
+    mockUserLabel: string;
+    mockAiLabel: string;
+    mockUser: string;
+    mockAiLine1: string;
+    mockAiLine2: string;
+    mockAiLine3: string;
+    mockSourcesLabel: string;
+    mockSource1: string;
+    mockSource2: string;
+    mockStreaming: string;
   };
   projects: {
     title: string;
@@ -131,6 +151,26 @@ export const messages: Record<Locale, Messages> = {
     hero: {
       ctaProjects: "查看项目",
       ctaLab: "前往实验室",
+      scrollCue: "探索精选项目",
+      previewEyebrow: "产品展示",
+      previewTitle: "Taylor Studio",
+      previewAssistant: "本站 AI 助手",
+      previewAssistantHint: "问答 · 流式 · 引用",
+      previewChatAI: "ChatAI",
+      previewChatAIHint: "流式对话",
+      previewScrM: "企微 SCRM",
+      previewScrMHint: "运营看板",
+      previewUrl: "yywtaylor.cyou · Taylor Studio",
+      mockUserLabel: "你",
+      mockAiLabel: "AI",
+      mockUser: "介绍一下本站技术栈",
+      mockAiLine1: "本站基于现代 Web 工程独立搭建。",
+      mockAiLine2: "支持 SSE 流式输出与知识库问答。",
+      mockAiLine3: "回答可附带引用来源。",
+      mockSourcesLabel: "Sources",
+      mockSource1: "本站架构",
+      mockSource2: "AI 助手",
+      mockStreaming: "生成中",
     },
     projects: {
       title: "精选项目",
@@ -263,6 +303,26 @@ export const messages: Record<Locale, Messages> = {
     hero: {
       ctaProjects: "Explore Projects",
       ctaLab: "Explore Lab",
+      scrollCue: "Explore Selected Projects",
+      previewEyebrow: "Product showcase",
+      previewTitle: "Taylor Studio",
+      previewAssistant: "AI Assistant",
+      previewAssistantHint: "Q&A · Stream · Sources",
+      previewChatAI: "ChatAI",
+      previewChatAIHint: "Streaming chat",
+      previewScrM: "WeCom SCRM",
+      previewScrMHint: "Ops dashboard",
+      previewUrl: "yywtaylor.cyou · Taylor Studio",
+      mockUserLabel: "You",
+      mockAiLabel: "AI",
+      mockUser: "Introduce this site's stack",
+      mockAiLine1: "Built independently as a modern web product.",
+      mockAiLine2: "SSE streaming and knowledge-base Q&A.",
+      mockAiLine3: "Answers include source citations.",
+      mockSourcesLabel: "Sources",
+      mockSource1: "Architecture",
+      mockSource2: "AI Assistant",
+      mockStreaming: "Streaming",
     },
     projects: {
       title: "Featured Projects",
