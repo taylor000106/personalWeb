@@ -63,8 +63,8 @@ export type Messages = {
   };
   experience: { title: string; subtitle: string };
   labPreview: {
-    eyebrow: string;
     title: string;
+    titleEn: string;
     subtitle: string;
     viewAll: string;
   };
@@ -90,6 +90,12 @@ export type Messages = {
     pageHome: string;
     pageAssistant: string;
     pageLab: string;
+    metricName: {
+      lcp: string;
+      cls: string;
+      inp: string;
+      bundle: string;
+    };
   };
   lab: {
     eyebrow: string;
@@ -197,15 +203,15 @@ export const messages: Record<Locale, Messages> = {
     archive: {
       eyebrow: "早期项目",
       title: "更多项目",
-      subtitle: "晟为数科时期 ToB 交付归档，不占用精选主叙事",
+      subtitle: "晟为数科时期 ToB 交付归档",
     },
     experience: {
       title: "经历",
       subtitle: "能力时间轴：从企业后台到 AI 应用，再到现代全栈平台",
     },
     labPreview: {
-      eyebrow: "前端工程实验室",
       title: "前端实验室",
+      titleEn: "Frontend Engineering Lab",
       subtitle:
         "记录有趣的交互效果、动画实验与技术探索。部分灵感来自社区作品，重在审美、交互与工程拆解，而非包装成原创作品集。",
       viewAll: "查看全部实验 →",
@@ -242,6 +248,12 @@ export const messages: Record<Locale, Messages> = {
       pageHome: "首页",
       pageAssistant: "AI 助手",
       pageLab: "实验室",
+      metricName: {
+        lcp: "最大内容绘制",
+        cls: "累积布局偏移",
+        inp: "交互至下次绘制",
+        bundle: "打包体积",
+      },
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",
@@ -272,7 +284,7 @@ export const messages: Record<Locale, Messages> = {
       implementation: "实现说明",
       sourceLabel: "来源",
     },
-    lang: { switchTo: "English", zh: "中文", en: "EN" },
+    lang: { switchTo: "语言", zh: "中文", en: "EN" },
     assistant: {
       eyebrow: "AI Knowledge Assistant",
       title: "AI助手",
@@ -356,8 +368,8 @@ export const messages: Record<Locale, Messages> = {
       subtitle: "Capability timeline: enterprise systems → AI apps → modern full-stack",
     },
     labPreview: {
-      eyebrow: "Frontend Engineering Lab",
-      title: "Frontend Experiments",
+      title: "Frontend Lab",
+      titleEn: "Frontend Engineering Lab",
       subtitle:
         "Interactive UI experiments and frontend explorations. Some pieces are community-inspired; the point is taste, interaction, and engineering notes — not claiming original art direction.",
       viewAll: "Explore Frontend Experiments →",
@@ -394,6 +406,12 @@ export const messages: Record<Locale, Messages> = {
       pageHome: "Home",
       pageAssistant: "Assistant",
       pageLab: "Lab",
+      metricName: {
+        lcp: "Largest Contentful Paint",
+        cls: "Cumulative Layout Shift",
+        inp: "Interaction to Next Paint",
+        bundle: "JS bundle size",
+      },
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",
@@ -424,7 +442,7 @@ export const messages: Record<Locale, Messages> = {
       implementation: "How it works",
       sourceLabel: "Source",
     },
-    lang: { switchTo: "中文", zh: "中文", en: "EN" },
+    lang: { switchTo: "Language", zh: "中文", en: "EN" },
     assistant: {
       eyebrow: "AI Knowledge Assistant",
       title: "AI Assistant",

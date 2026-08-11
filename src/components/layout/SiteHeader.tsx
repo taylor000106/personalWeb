@@ -9,24 +9,15 @@ import { useI18n } from "@/i18n/LanguageProvider";
 const linkClass = "text-zinc-400 transition-colors hover:text-white";
 const activeClass = "text-white";
 
-export function SiteHeader({ variant = "sticky" }: { variant?: "hero" | "sticky" }) {
+export function SiteHeader() {
   const { t } = useI18n();
   const pathname = usePathname();
   const onLab = pathname === "/lab" || pathname.startsWith("/lab/");
   const onAssistant = pathname === "/assistant" || pathname.startsWith("/assistant/");
 
-  const headerClass =
-    variant === "sticky"
-      ? "sticky top-0 z-20 border-b border-white/10 bg-[#05050c]/80 backdrop-blur-md"
-      : "relative z-10";
-  const innerClass =
-    variant === "sticky"
-      ? "mx-auto flex max-w-6xl items-center justify-between px-6 py-4"
-      : "flex items-center justify-between px-6 py-5 md:px-12";
-
   return (
-    <header className={headerClass}>
-      <div className={innerClass}>
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#05050c]/80 backdrop-blur-md">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           href="/"
           className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-violet-300"

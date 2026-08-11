@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProjectItem, ProjectMedia } from "@/content/projects";
+import { getProjectTitles } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
 import {
   hasArchitectureDiagram,
@@ -105,6 +106,7 @@ export function ProjectDetailView({
   const { t, locale } = useI18n();
   const eng = project.engineering;
   const showArchitecture = hasArchitectureDiagram(project.id);
+  const names = getProjectTitles(project, locale);
 
   return (
     <main className="mx-auto max-w-3xl px-6 py-10 md:py-14">
@@ -125,10 +127,10 @@ export function ProjectDetailView({
           ) : null}
         </div>
         <h1 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
-          {project.title}
+          {names.primary}
         </h1>
-        {project.titleEn && locale === "zh" ? (
-          <p className="mt-2 text-sm text-zinc-500">{project.titleEn}</p>
+        {names.secondary ? (
+          <p className="mt-2 text-sm text-zinc-500">{names.secondary}</p>
         ) : null}
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-zinc-300">
           {project.summary}
@@ -165,7 +167,7 @@ export function ProjectDetailView({
         <div className="mt-10">
           <MediaFrame
             src={cover}
-            alt={`${project.title} hero`}
+            alt={`${names.primary} hero`}
             caption={t.projects.heroCaption}
             priority
           />

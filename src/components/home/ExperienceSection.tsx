@@ -28,7 +28,9 @@ export function ExperienceSection() {
         {timeline.map((node) => (
           <li key={node.id} className="relative pb-10 last:pb-0">
             <span className="absolute top-1.5 -left-[1.91rem] h-2.5 w-2.5 rounded-full bg-violet-500 ring-4 ring-[#05050c] md:-left-[2.41rem]" />
-            <p className="font-display text-sm text-zinc-500">{node.year}</p>
+            <p className="font-display text-sm text-zinc-500">
+              {locale === "zh" ? (node.yearZh ?? node.year) : node.year}
+            </p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
               {locale === "zh" ? node.titleZh : node.title}
             </h3>

@@ -6,11 +6,13 @@ import { HeroSection } from "./HeroSection";
 import { LabPreviewSection } from "./LabPreviewSection";
 import { ProjectsSection } from "./ProjectsSection";
 import { VitalsSection } from "./VitalsSection";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import { profile } from "@/content/profile";
 
 export function HomePage() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#05050c] text-white">
+    <div className="relative min-h-screen bg-[#05050c] text-white">
+      <SiteHeader />
       <HeroSection />
       <ProjectsSection />
       <ArchiveSection />

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProjectItem } from "@/content/projects";
+import { getProjectTitles } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
 
 export function ArchiveSectionClient({
@@ -10,7 +11,7 @@ export function ArchiveSectionClient({
 }: {
   items: { project: ProjectItem; cover: string | null }[];
 }) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   return (
     <section id="archive" className="relative z-10 mx-auto max-w-5xl px-6 pb-8 pt-4">
@@ -25,43 +26,51 @@ export function ArchiveSectionClient({
       </p>
 
       <div className="mt-10 grid gap-4 sm:grid-cols-3">
-        {items.map(({ project, cover }) => (
-          <Link
-            key={project.id}
-            href={`/projects/${project.id}`}
-            className="group border border-white/10 bg-white/[0.02] transition-colors hover:border-white/20"
-          >
-            <div
-              className="relative aspect-[16/10] overflow-hidden border-b border-white/10"
-              style={
-                cover
-                  ? undefined
-                  : {
-                      background: `linear-gradient(145deg, ${project.accent}55, #05050c 70%)`,
-                    }
-              }
+        {items.map(({ project, cover }) => {
+          const names = getProjectTitles(project, locale);
+          return (
+            <Link
+              key={project.id}
+              href={`/projects/${project.id}`}
+              className="group border border-white/10 bg-white/[0.02] transition-colors hover:border-white/20"
             >
-              {cover ? (
-                <Image
-                  src={cover}
-                  alt={project.title}
-                  fill
-                  className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
-                  sizes="(max-width: 640px) 100vw, 33vw"
-                />
-              ) : null}
-            </div>
-            <div className="p-4">
-              <h3 className="font-display text-sm font-semibold text-white">
-                {project.title}
-              </h3>
-              <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-500">
-                {project.summary}
-              </p>
-              <p className="mt-3 text-xs text-violet-300/90">{t.projects.viewDetail} →</p>
-            </div>
-          </Link>
-        ))}
+              <div
+                className="relative aspect-[16/10] overflow-hidden border-b border-white/10"
+                style={
+                  cover
+                    ? undefined
+                    : {
+                        background: `linear-gradient(145deg, ${project.accent}55, #05050c 70%)`,
+                      }
+                }
+              >
+                {cover ? (
+                  <Image
+                    src={cover}
+                    alt={names.primary}
+                    fill
+                    className="object-cover object-top transition-transform duration-500 group-hover:scale-[1.02]"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                  />
+                ) : null}
+              </div>
+              <div className="p-4">
+                <h3 className="font-display text-sm font-semibold text-white">
+                  {names.primary}
+                </h3>
+                {names.secondary ? (
+                  <p className="mt-1 text-[11px] text-zinc-600">{names.secondary}</p>
+                ) : null}
+                <p className="mt-2 line-clamp-2 text-xs leading-relaxed text-zinc-500">
+                  {project.summary}
+                </p>
+                <p className="mt-3 text-xs text-violet-300/90">
+                  {t.projects.viewDetail} →
+                </p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );

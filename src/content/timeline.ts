@@ -1,6 +1,7 @@
 export type TimelineNode = {
   id: string;
   year: string;
+  yearZh?: string;
   title: string;
   titleZh: string;
   keywords: string[];
@@ -28,10 +29,19 @@ export const timeline: TimelineNode[] = [
   {
     id: "2025",
     year: "2025",
-    title: "SaaS and Modern Stack",
-    titleZh: "SaaS 与现代技术栈",
-    keywords: ["Vue3", "TypeScript", "SaaS", "React", "Next.js"],
-    note: "企微 SCRM 复杂业务；同时向 React / Next.js / AI 平台方向扩展。",
+    title: "SaaS Delivery",
+    titleZh: "SaaS 业务交付",
+    keywords: ["Vue3", "TypeScript", "SaaS", "企微", "复杂表单"],
+    note: "百珏企微 SCRM：运营后台与 H5 活动模块，复杂业务与工程规范落地。",
+  },
+  {
+    id: "present",
+    year: "2026 · Present",
+    yearZh: "2026 · 至今",
+    title: "Independent Product Platform",
+    titleZh: "独立产品平台",
+    keywords: ["Next.js", "React", "SSE", "AI Assistant", "Docker"],
+    note: "独立设计并上线 Taylor Studio：Portfolio、Lab、知识库助手与生产部署闭环。",
   },
 ];
 

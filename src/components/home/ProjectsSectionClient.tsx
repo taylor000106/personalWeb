@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ProjectItem } from "@/content/projects";
+import { getProjectTitles } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
 
 export function ProjectsSectionClient({
@@ -25,125 +26,128 @@ export function ProjectsSectionClient({
       </p>
 
       <div className="mt-12 space-y-6">
-        {items.map(({ project, cover }, index) => (
-          <article
-            key={project.id}
-            className="overflow-hidden border border-white/10 bg-white/[0.03]"
-          >
-            <div
-              className="h-1 w-full"
-              style={{
-                background: `linear-gradient(90deg, ${project.accent}, transparent)`,
-              }}
-              aria-hidden
-            />
-            <div className="grid gap-6 p-6 md:grid-cols-[minmax(0,1.2fr)_minmax(220px,0.9fr)] md:p-8">
-              <div>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-display text-xs text-zinc-500">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <p className="text-xs text-zinc-500">{project.period}</p>
-                  {project.live ? (
-                    <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300">
-                      {t.projects.liveBadge}
+        {items.map(({ project, cover }, index) => {
+          const names = getProjectTitles(project, locale);
+          return (
+            <article
+              key={project.id}
+              className="overflow-hidden border border-white/10 bg-white/[0.03]"
+            >
+              <div
+                className="h-1 w-full"
+                style={{
+                  background: `linear-gradient(90deg, ${project.accent}, transparent)`,
+                }}
+                aria-hidden
+              />
+              <div className="grid gap-6 p-6 md:grid-cols-[minmax(0,1.2fr)_minmax(220px,0.9fr)] md:p-8">
+                <div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="font-display text-xs text-zinc-500">
+                      {String(index + 1).padStart(2, "0")}
                     </span>
-                  ) : null}
-                </div>
-                <h3 className="mt-2 font-display text-xl font-semibold text-white">
-                  <Link
-                    href={`/projects/${project.id}`}
-                    className="transition-colors hover:text-violet-200"
-                  >
-                    {project.title}
-                  </Link>
-                </h3>
-                {project.titleEn && locale === "zh" ? (
-                  <p className="mt-1 text-sm text-zinc-500">{project.titleEn}</p>
-                ) : null}
-                <p className="mt-3 text-sm leading-relaxed text-zinc-400">
-                  {project.summary}
-                </p>
-                <ul className="mt-4 space-y-2 text-sm text-zinc-400">
-                  {project.highlights.slice(0, 2).map((item) => (
-                    <li key={item} className="flex gap-2">
-                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-                <div className="mt-5 flex flex-wrap items-center gap-4">
-                  <Link
-                    href={`/projects/${project.id}`}
-                    className="text-sm font-medium text-violet-300 hover:text-violet-200"
-                  >
-                    {t.projects.viewDetail} →
-                  </Link>
-                  {project.links?.slice(0, 1).map((link) =>
-                    link.href.startsWith("/") ? (
-                      <Link
-                        key={link.href + link.label}
-                        href={link.href}
-                        className="text-sm text-zinc-500 hover:text-zinc-300"
-                      >
-                        {link.label}
-                      </Link>
-                    ) : (
-                      <a
-                        key={link.href + link.label}
-                        href={link.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm text-zinc-500 hover:text-zinc-300"
-                      >
-                        {link.label}
-                      </a>
-                    ),
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col justify-between gap-4">
-                <Link
-                  href={`/projects/${project.id}`}
-                  className="relative aspect-[16/10] overflow-hidden border border-white/10 md:min-h-[180px]"
-                  style={
-                    cover
-                      ? undefined
-                      : {
-                          background: `linear-gradient(145deg, ${project.accent}55, #05050c 70%)`,
-                        }
-                  }
-                >
-                  {cover ? (
-                    <Image
-                      src={cover}
-                      alt={project.title}
-                      fill
-                      className="object-cover object-top"
-                      sizes="(max-width: 768px) 100vw, 360px"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex flex-col justify-end p-4">
-                      <span className="text-[10px] tracking-wider text-white/45 uppercase">
-                        {t.projects.screenshotTbd}
+                    <p className="text-xs text-zinc-500">{project.period}</p>
+                    {project.live ? (
+                      <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300">
+                        {t.projects.liveBadge}
                       </span>
-                    </div>
-                  )}
-                </Link>
-                <ul className="flex flex-wrap gap-1.5">
-                  {project.stack.slice(0, 5).map((tag) => (
-                    <li
-                      key={tag}
-                      className="border border-white/10 px-2 py-0.5 text-[11px] text-zinc-400"
+                    ) : null}
+                  </div>
+                  <h3 className="mt-2 font-display text-xl font-semibold text-white">
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="transition-colors hover:text-violet-200"
                     >
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
+                      {names.primary}
+                    </Link>
+                  </h3>
+                  {names.secondary ? (
+                    <p className="mt-1 text-sm text-zinc-500">{names.secondary}</p>
+                  ) : null}
+                  <p className="mt-3 text-sm leading-relaxed text-zinc-400">
+                    {project.summary}
+                  </p>
+                  <ul className="mt-4 space-y-2 text-sm text-zinc-400">
+                    {project.highlights.slice(0, 2).map((item) => (
+                      <li key={item} className="flex gap-2">
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-violet-400" />
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-5 flex flex-wrap items-center gap-4">
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="text-sm font-medium text-violet-300 hover:text-violet-200"
+                    >
+                      {t.projects.viewDetail} →
+                    </Link>
+                    {project.links?.slice(0, 1).map((link) =>
+                      link.href.startsWith("/") ? (
+                        <Link
+                          key={link.href + link.label}
+                          href={link.href}
+                          className="text-sm text-zinc-500 hover:text-zinc-300"
+                        >
+                          {link.label}
+                        </Link>
+                      ) : (
+                        <a
+                          key={link.href + link.label}
+                          href={link.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-zinc-500 hover:text-zinc-300"
+                        >
+                          {link.label}
+                        </a>
+                      ),
+                    )}
+                  </div>
+                </div>
+                <div className="flex flex-col justify-between gap-4">
+                  <Link
+                    href={`/projects/${project.id}`}
+                    className="relative aspect-[16/10] overflow-hidden border border-white/10 md:min-h-[180px]"
+                    style={
+                      cover
+                        ? undefined
+                        : {
+                            background: `linear-gradient(145deg, ${project.accent}55, #05050c 70%)`,
+                          }
+                    }
+                  >
+                    {cover ? (
+                      <Image
+                        src={cover}
+                        alt={names.primary}
+                        fill
+                        className="object-cover object-top"
+                        sizes="(max-width: 768px) 100vw, 360px"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex flex-col justify-end p-4">
+                        <span className="text-[10px] tracking-wider text-white/45 uppercase">
+                          {t.projects.screenshotTbd}
+                        </span>
+                      </div>
+                    )}
+                  </Link>
+                  <ul className="flex flex-wrap gap-1.5">
+                    {project.stack.slice(0, 5).map((tag) => (
+                      <li
+                        key={tag}
+                        className="border border-white/10 px-2 py-0.5 text-[11px] text-zinc-400"
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          </article>
-        ))}
+            </article>
+          );
+        })}
       </div>
     </section>
   );

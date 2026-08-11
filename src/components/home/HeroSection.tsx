@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { HeroPreview } from "@/components/home/HeroPreview";
 import { profile } from "@/content/profile";
 import { useI18n } from "@/i18n/LanguageProvider";
@@ -18,11 +17,9 @@ export function HeroSection() {
   const isZh = locale === "zh";
 
   return (
-    <section className="relative min-h-[100svh] overflow-hidden">
+    <section className="relative min-h-[calc(100svh-4.5rem)] overflow-hidden">
       <ParticleCanvas />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(124,58,237,0.18),transparent_55%)]" />
-
-      <SiteHeader variant="hero" />
 
       <div className="relative z-10 mx-auto grid max-w-6xl items-center gap-10 px-6 pb-28 pt-14 md:pt-20 lg:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.15fr)] lg:gap-8 lg:pb-32">
         <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
@@ -41,7 +38,7 @@ export function HeroSection() {
             transition={{ duration: 0.55, delay: 0.08 }}
             className="mt-5 text-lg text-zinc-200 md:text-xl"
           >
-            {profile.roleZh}
+            {isZh ? profile.roleZh : profile.roleEn}
           </motion.p>
           <motion.p
             initial={{ y: 16, opacity: 0 }}
@@ -49,7 +46,7 @@ export function HeroSection() {
             transition={{ duration: 0.55, delay: 0.12 }}
             className="mt-1 text-sm tracking-wide text-violet-300/90"
           >
-            {profile.roleEn}
+            {isZh ? profile.roleEn : profile.roleZh}
           </motion.p>
 
           <motion.p

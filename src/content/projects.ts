@@ -14,7 +14,8 @@ export type ProjectItem = {
   /** URL slug, e.g. personal-web */
   id: string;
   title: string;
-  titleEn?: string;
+  /** Chinese display name — primary when locale is zh */
+  titleZh?: string;
   period: string;
   /** One-line positioning (homepage + detail intro) */
   summary: string;
@@ -47,7 +48,7 @@ export const projects: ProjectItem[] = [
   {
     id: "personal-web",
     title: "Personal AI Knowledge Platform",
-    titleEn: "本站 · AI 知识与工程平台",
+    titleZh: "本站 · AI 知识与工程平台",
     period: "2026 — Present",
     summary: "可上线的前端技术平台：Portfolio、Engineering Lab、AI 知识助手与私人面板。",
     highlights: ["Next.js 全栈 + SSE AI 助手闭环", "Docker / Actions 生产部署"],
@@ -106,7 +107,7 @@ export const projects: ProjectItem[] = [
   {
     id: "chatai",
     title: "ChatAI Multi-platform Application",
-    titleEn: "ChatAI 多端 AI 对话应用",
+    titleZh: "ChatAI 多端 AI 对话应用",
     period: "2024.07 — 2025.01",
     summary: "面向 C 端的多端 AI 对话产品：小程序 / App / H5 / PC，覆盖流式对话与支付。",
     highlights: ["SSE / WebSocket 流式对话体验", "多端发布与支付链路落地"],
@@ -144,7 +145,7 @@ export const projects: ProjectItem[] = [
   {
     id: "linkwechat",
     title: "Enterprise WeCom SCRM",
-    titleEn: "企微 SCRM 智能获客与运营平台",
+    titleZh: "企微 SCRM 智能获客与运营平台",
     period: "2025.05 — Present",
     summary: "ToB 企微营销 SaaS：客户运营、营销任务、数据统计与 AI 托管能力。",
     highlights: ["复杂 ToB 后台与可复用任务组件", "虚拟列表与运营数据体验优化"],
@@ -197,7 +198,7 @@ export const projects: ProjectItem[] = [
   {
     id: "prm-license",
     title: "PRM · License & Channel Admin",
-    titleEn: "授权与渠道管理后台",
+    titleZh: "授权与渠道管理后台",
     period: "2023.03 — 2024.06",
     summary: "信创授权后台：代理商层级、激活码库存、订单与角色权限。",
     highlights: ["多角色后台与权限路由", "激活码 / 库存数据看板"],
@@ -231,7 +232,7 @@ export const projects: ProjectItem[] = [
   {
     id: "kms-console",
     title: "KMS Console · Device Ops",
-    titleEn: "设备与镜像运维控制台",
+    titleZh: "设备与镜像运维控制台",
     period: "2023 — 2024",
     summary: "设备终端运维控制台：设备管理、镜像、KMS 激活与策略权限。",
     highlights: ["设备 / 镜像运维台", "分组策略与权限管控"],
@@ -265,7 +266,7 @@ export const projects: ProjectItem[] = [
   {
     id: "toc-cms",
     title: "ToC CMS · App Catalog Admin",
-    titleEn: "应用目录与运营配置后台",
+    titleZh: "应用目录与运营配置后台",
     period: "2023 — 2024",
     summary: "面向终端侧的应用与内容运营：应用上架、分类、轮播、设备与活动码。",
     highlights: ["应用上架与复杂配置表单", "轮播 / 活动码运营能力"],
@@ -303,6 +304,18 @@ export const archiveProjects = projects.filter((p) => p.archive);
 
 export function getProject(slug: string) {
   return projects.find((p) => p.id === slug);
+}
+
+export function getProjectTitles(project: ProjectItem, locale: "zh" | "en") {
+  const en = project.title;
+  const zh = project.titleZh ?? project.title;
+  if (locale === "zh") {
+    return { primary: zh, secondary: zh !== en ? en : undefined };
+  }
+  return {
+    primary: en,
+    secondary: project.titleZh && project.titleZh !== en ? project.titleZh : undefined,
+  };
 }
 
 export function getAllProjectSlugs() {

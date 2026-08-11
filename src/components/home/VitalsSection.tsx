@@ -52,14 +52,22 @@ export function VitalsSection() {
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {vitalMetrics.map((metric) => {
           const measured = metric.metricKey ? live[metric.metricKey] : undefined;
+          const name = t.vitals.metricName[metric.id as keyof typeof t.vitals.metricName];
           return (
             <div
               key={metric.id}
               className="border border-white/10 bg-white/[0.03] px-4 py-5"
             >
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-display text-sm text-zinc-400">{metric.label}</p>
-                <span className="text-[10px] tracking-wide text-zinc-600 uppercase">
+              <div className="flex items-start justify-between gap-2">
+                <div>
+                  <p className="font-display text-sm text-zinc-200">{metric.label}</p>
+                  {name ? (
+                    <p className="mt-0.5 text-[11px] leading-snug text-zinc-500">
+                      {name}
+                    </p>
+                  ) : null}
+                </div>
+                <span className="shrink-0 text-[10px] tracking-wide text-zinc-600 uppercase">
                   {measured ? t.vitals.live : t.vitals.target}
                 </span>
               </div>

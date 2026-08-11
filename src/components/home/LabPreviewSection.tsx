@@ -16,12 +16,12 @@ export function LabPreviewSection() {
   return (
     <section id="lab" className="relative z-10 mx-auto max-w-5xl px-6 py-20">
       <div className="border border-white/10 bg-white/[0.03] px-6 py-10 md:px-10">
-        <p className="text-xs tracking-[0.2em] text-violet-300/80 uppercase">
-          {t.labPreview.eyebrow}
-        </p>
-        <h2 className="mt-3 font-display text-2xl font-semibold md:text-3xl">
+        <h2 className="font-display text-2xl font-semibold md:text-3xl">
           {t.labPreview.title}
         </h2>
+        <p className="mt-2 text-sm tracking-wide text-violet-300/80">
+          {t.labPreview.titleEn}
+        </p>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400">
           {t.labPreview.subtitle}
         </p>
