@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LanguageToggle } from "@/components/ui/LanguageToggle";
@@ -20,8 +21,16 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           href="/"
-          className="font-display text-sm font-semibold tracking-[0.2em] uppercase text-violet-300"
+          className="flex items-center gap-2.5 font-display text-sm font-semibold tracking-[0.2em] uppercase text-violet-300"
         >
+          <Image
+            src="/favicon.png"
+            alt=""
+            width={22}
+            height={22}
+            className="rounded-[5px]"
+            priority
+          />
           {profile.name}
         </Link>
         <nav className="flex items-center gap-3 text-sm sm:gap-4">
