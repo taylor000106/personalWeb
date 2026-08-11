@@ -4,11 +4,11 @@ import { experienceOverview, timeline } from "@/content/timeline";
 import { useI18n } from "@/i18n/LanguageProvider";
 
 export function ExperienceSection() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
 
   return (
     <section id="experience" className="relative z-10 mx-auto max-w-5xl px-6 py-20">
-      <h2 className="text-center font-display text-2xl font-semibold md:text-3xl">
+      <h2 className="mt-2 text-center font-display text-2xl font-semibold md:text-3xl">
         {t.experience.title}
       </h2>
       <p className="mx-auto mt-3 max-w-lg text-center text-sm text-zinc-500">
@@ -19,7 +19,9 @@ export function ExperienceSection() {
         <p className="font-display text-sm text-violet-300/90">
           {experienceOverview.period}
         </p>
-        <p className="mt-1 text-zinc-300">{experienceOverview.role}</p>
+        <p className="mt-1 text-zinc-300">
+          {locale === "zh" ? "前端工程师" : experienceOverview.role}
+        </p>
       </div>
 
       <ol className="mt-12 space-y-0 border-l border-white/10 pl-6 md:pl-8">
@@ -28,7 +30,7 @@ export function ExperienceSection() {
             <span className="absolute top-1.5 -left-[1.91rem] h-2.5 w-2.5 rounded-full bg-violet-500 ring-4 ring-[#05050c] md:-left-[2.41rem]" />
             <p className="font-display text-sm text-zinc-500">{node.year}</p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
-              {node.title}
+              {locale === "zh" ? node.titleZh : node.title}
             </h3>
             <ul className="mt-3 flex flex-wrap gap-1.5">
               {node.keywords.map((kw) => (

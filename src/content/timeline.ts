@@ -2,6 +2,7 @@ export type TimelineNode = {
   id: string;
   year: string;
   title: string;
+  titleZh: string;
   keywords: string[];
   note: string;
 };
@@ -12,6 +13,7 @@ export const timeline: TimelineNode[] = [
     id: "2022",
     year: "2022",
     title: "Enterprise Systems",
+    titleZh: "企业后台",
     keywords: ["Vue2", "Element-UI", "ECharts", "权限后台"],
     note: "晟为数科早期 ToB：授权管理、设备运维、应用运营后台。",
   },
@@ -19,6 +21,7 @@ export const timeline: TimelineNode[] = [
     id: "2024",
     year: "2024",
     title: "AI Application",
+    titleZh: "AI 应用",
     keywords: ["SSE", "WebSocket", "uni-app", "Payment", "Multi-platform"],
     note: "同司 ChatAI 多端：流式对话、登录支付与多端发布。",
   },
@@ -26,6 +29,7 @@ export const timeline: TimelineNode[] = [
     id: "2025",
     year: "2025",
     title: "SaaS and Modern Stack",
+    titleZh: "SaaS 与现代技术栈",
     keywords: ["Vue3", "TypeScript", "SaaS", "React", "Next.js"],
     note: "企微 SCRM 复杂业务；同时向 React / Next.js / AI 平台方向扩展。",
   },

@@ -17,6 +17,8 @@ export type Messages = {
   projects: {
     title: string;
     subtitle: string;
+    eyebrow: string;
+    liveBadge: string;
     screenshotTbd: string;
     viewDetail: string;
     back: string;
@@ -51,12 +53,23 @@ export type Messages = {
   vitals: {
     title: string;
     subtitle: string;
+    eyebrow: string;
     target: string;
     live: string;
     waiting: string;
     labHint: string;
     lighthouseEyebrow: string;
     lighthouseNote: string;
+    lighthouseMeta: string;
+    lighthouseLabNote: string;
+    colPage: string;
+    colPerf: string;
+    colA11y: string;
+    colBp: string;
+    colSeo: string;
+    pageHome: string;
+    pageAssistant: string;
+    pageLab: string;
   };
   lab: {
     eyebrow: string;
@@ -116,12 +129,14 @@ export const messages: Record<Locale, Messages> = {
       assistant: "AI助手",
     },
     hero: {
-      ctaProjects: "Explore Projects",
-      ctaLab: "Explore Lab",
+      ctaProjects: "查看项目",
+      ctaLab: "前往实验室",
     },
     projects: {
-      title: "Featured Projects",
+      title: "精选项目",
       subtitle: "代表交付：本站平台、AI 多端产品、ToB SaaS",
+      eyebrow: "精选",
+      liveBadge: "已上线",
       screenshotTbd: "截图待补充",
       viewDetail: "查看详情",
       back: "返回项目",
@@ -140,41 +155,53 @@ export const messages: Record<Locale, Messages> = {
       engSecurity: "安全",
     },
     archive: {
-      eyebrow: "Earlier work",
+      eyebrow: "早期项目",
       title: "更多项目",
-      subtitle: "晟为数科时期 ToB 交付归档，不占用 Featured 主叙事",
+      subtitle: "晟为数科时期 ToB 交付归档，不占用精选主叙事",
     },
     experience: {
-      title: "Experience",
+      title: "经历",
       subtitle: "能力时间轴：从企业后台到 AI 应用，再到现代全栈平台",
     },
     labPreview: {
-      eyebrow: "Frontend Engineering Lab",
+      eyebrow: "前端工程实验室",
       title: "前端实验室",
       subtitle:
         "记录有趣的交互效果、动画实验与技术探索。部分灵感来自社区作品，重在审美、交互与工程拆解，而非包装成原创作品集。",
-      viewAll: "Explore Frontend Experiments →",
+      viewAll: "查看全部实验 →",
     },
     articles: {
-      title: "Articles",
+      title: "文章",
       subtitle: "技术迁移 · SSE 流式交互 · 全栈部署",
       soon: "撰写中",
     },
     contact: {
-      title: "Contact",
+      title: "联系",
       subtitle: "欢迎通过 GitHub 或 AI 助手了解项目细节",
     },
     vitals: {
-      title: "Web Vitals",
+      title: "性能与体验",
       subtitle:
-        "上方：目标阈值 + 本会话 web-vitals 实测。下方：生产站 Lighthouse 归档分数（非模拟）。",
+        "上方：目标阈值 + 本会话实测。下方：生产站 Lighthouse 归档分数（非模拟）。",
+      eyebrow: "性能",
       target: "目标",
       live: "实测",
       waiting: "浏览页面后自动采集",
       labHint: "性能 Demo 见",
-      lighthouseEyebrow: "Lighthouse · production",
+      lighthouseEyebrow: "Lighthouse · 生产环境",
       lighthouseNote:
-        "在 yywtaylor.cyou 用 Lighthouse CLI（mobile）实测四维分数；完整记录见仓库 docs/lighthouse.md。",
+        "在 yywtaylor.cyou 用 Lighthouse CLI（手机端）实测四维分数；完整记录见仓库 docs/lighthouse.md。",
+      lighthouseMeta: "{origin} · 手机端 · {tool} · {date}",
+      lighthouseLabNote:
+        "实验室页性能分偏低，主要来自实验页主线程占用（总阻塞时间），不作为作品集首屏指标。",
+      colPage: "页面",
+      colPerf: "性能 Perf",
+      colA11y: "无障碍 A11y",
+      colBp: "最佳实践 BP",
+      colSeo: "搜索优化 SEO",
+      pageHome: "首页",
+      pageAssistant: "AI 助手",
+      pageLab: "实验室",
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",
@@ -240,6 +267,8 @@ export const messages: Record<Locale, Messages> = {
     projects: {
       title: "Featured Projects",
       subtitle: "This platform, ChatAI multi-end, and WeCom SaaS delivery",
+      eyebrow: "Featured",
+      liveBadge: "Live",
       screenshotTbd: "Screenshot TBD",
       viewDetail: "View details",
       back: "Back to projects",
@@ -283,9 +312,10 @@ export const messages: Record<Locale, Messages> = {
       subtitle: "Reach me via GitHub, or ask the AI assistant about the work",
     },
     vitals: {
-      title: "Web Vitals",
+      title: "Performance",
       subtitle:
         "Above: targets + live session web-vitals. Below: archived production Lighthouse scores (not mocked).",
+      eyebrow: "Performance",
       target: "Target",
       live: "Live",
       waiting: "Interact with the page to collect",
@@ -293,6 +323,17 @@ export const messages: Record<Locale, Messages> = {
       lighthouseEyebrow: "Lighthouse · production",
       lighthouseNote:
         "Scores from Lighthouse CLI (mobile) against yywtaylor.cyou. Full notes in docs/lighthouse.md.",
+      lighthouseMeta: "{origin} · mobile · {tool} · {date}",
+      lighthouseLabNote:
+        "Lab Performance is lower due to demo-page main-thread cost (TBT); not a homepage KPI.",
+      colPage: "Page",
+      colPerf: "Perf",
+      colA11y: "A11y",
+      colBp: "Best Practices",
+      colSeo: "SEO",
+      pageHome: "Home",
+      pageAssistant: "Assistant",
+      pageLab: "Lab",
     },
     lab: {
       eyebrow: "Creative Frontend Experiments",

@@ -15,7 +15,7 @@ export function ProjectsSectionClient({
   return (
     <section id="projects" className="relative z-10 mx-auto max-w-5xl px-6 py-20">
       <p className="text-center text-xs tracking-[0.2em] text-violet-300/80 uppercase">
-        Featured
+        {t.projects.eyebrow}
       </p>
       <h2 className="mt-2 text-center font-display text-2xl font-semibold md:text-3xl">
         {t.projects.title}
@@ -45,8 +45,8 @@ export function ProjectsSectionClient({
                   </span>
                   <p className="text-xs text-zinc-500">{project.period}</p>
                   {project.live ? (
-                    <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300 uppercase">
-                      Live
+                    <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300">
+                      {t.projects.liveBadge}
                     </span>
                   ) : null}
                 </div>
