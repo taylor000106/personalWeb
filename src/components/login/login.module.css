@@ -230,6 +230,12 @@
   padding-right: 44px;
 }
 
+/* Hide Edge/IE native password reveal so it doesn't stack with our toggle */
+.inputWrap input::-ms-reveal,
+.inputWrap input::-ms-clear {
+  display: none;
+}
+
 .togglePw {
   position: absolute;
   right: 12px;

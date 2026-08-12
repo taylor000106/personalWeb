@@ -22,10 +22,17 @@ function isBcryptHash(value: string) {
   return /^\$2[aby]?\$\d{2}\$/.test(value);
 }
 
+/** Quotes + leftover `\$` from .env escaping (Next expands unescaped `$`). */
+function normalizeAdminPassword(value: string) {
+  return value
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .replace(/\\\$/g, "$");
+}
+
 export async function verifyCredentials(email: string, password: string) {
   const adminEmail = process.env.ADMIN_EMAIL?.trim();
-  // Strip accidental quotes; dotenv-expand can mangle unescaped $
-  const adminPassword = process.env.ADMIN_PASSWORD?.trim().replace(/^["']|["']$/g, "");
+  const adminPassword = normalizeAdminPassword(process.env.ADMIN_PASSWORD ?? "");
   if (!adminEmail || !adminPassword) {
     return { ok: false as const, error: "Admin account is not configured" };
   }
