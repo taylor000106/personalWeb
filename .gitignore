@@ -45,6 +45,9 @@ next-env.d.ts
 
 # local extract / scratch
 /_tmp/
+/sc-datav-main/
+/sc-datav.zip
+/datav-src/
 
 # scripts (keep useful helpers tracked; ignore one-off patch scripts)
 scripts/*

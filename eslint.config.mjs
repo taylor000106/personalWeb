@@ -11,6 +11,15 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  {
+    ignores: [
+      ".next/**",
+      "node_modules/**",
+      "public/**",
+      "sc-datav-main/**",
+      "deploy/**",
+    ],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   eslintConfigPrettier,
 ];

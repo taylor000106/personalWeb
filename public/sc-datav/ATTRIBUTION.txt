@@ -1,0 +1,12 @@
+# Attribution
+#
+# Framework / original demo:
+#   https://github.com/knight-L/sc-datav
+#   License: Apache-2.0
+#
+# Local customization on this personal site:
+#   - Jiangsu province/city GeoJSON (Aliyun DataV areas_v3)
+#   - Regenerated map / normal / displacement textures
+#   - City labels & sample chart copy for Jiangsu
+#
+# Hosted at /sc-datav/

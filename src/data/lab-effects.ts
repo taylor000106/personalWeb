@@ -8,6 +8,10 @@ export type LabEffect = {
   tags: string[];
   demoPath: string;
   previewBg: string;
+  /** Static cover when iframe is unsuitable (e.g. full-screen datav) */
+  previewImage?: string;
+  /** Open as standalone mini-site; detail page shows cover + CTA instead of iframe */
+  externalSite?: boolean;
   /** Community-inspired pieces should set source; omit for original lab work */
   source?: {
     name: string;
@@ -705,42 +709,45 @@ export const labEffects: LabEffect[] = [
     techStack: ["Web Worker", "ArrayBuffer", "performance.now"],
   },
   {
-    slug: "china-3d-map",
+    slug: "sc-datav",
     category: "animation",
-    title: "全国 3D 地图",
-    subtitle: "省级轮廓挤出 · 悬停高亮 · 城际飞线",
+    title: "3D 数据可视化大屏",
+    subtitle: "江苏地图 · 飞线扫光 · 多图表联动（独立子站）",
     interactive: true,
-    tags: ["Three.js", "GeoJSON", "Dataviz"],
-    demoPath: "/lab/demos/china-3d-map.html",
+    externalSite: true,
+    tags: ["Three.js", "ECharts", "Dataviz"],
+    demoPath: "/sc-datav/index.html#/demo0",
+    previewImage: "/sc-datav/demo_0.jpg?v=js-sat-3",
     previewBg: "#050814",
     source: {
-      name: "knight-L / sc-datav（思路参考）",
+      name: "knight-L / sc-datav",
       url: "https://github.com/knight-L/sc-datav",
     },
     publishedAt: "2026-08-14",
     summary:
-      "把中国省级 GeoJSON 挤出成 Three.js 三维地图：轨道旋转、省份悬停高亮、主要城市之间的飞线粒子。适合作为数据大屏方向的 Lab 起步版。",
+      "以独立子站形式托管的 Three.js 数据大屏（基于 knight-L/sc-datav，Apache-2.0）。已替换为江苏省市界与贴图，含 3D 地图、轮廓飞线与多图表联动。请点击进入完整子站体验。",
     techPoints: [
-      "GeoJSON Polygon / MultiPolygon → ExtrudeGeometry",
-      "经纬度简易投影与挤出高度",
-      "Raycaster 省份拾取与飞线动画",
+      "独立静态子站 /sc-datav/（Hash 路由）",
+      "江苏省市界 GeoJSON + 自生成贴图",
+      "Three.js + R3F 三维地图与飞线",
+      "ECharts 图表联动与大屏布局",
     ],
     analysis: [
       {
-        heading: "从 2D 边界到 3D 地图",
-        body: "读取省级 FeatureCollection，将每个 ring 建成 Shape 再 Extrude；旋转到 XZ 平面后形成「地图地形」。全国数据比单省更密，边界可后续再做简化降面数。",
+        heading: "为什么做成子站",
+        body: "原项目是完整 Vite SPA，依赖 Three / ECharts / 贴图资源较大。嵌进个人站 iframe 时容易黑屏或卡顿；挂到 /sc-datav/ 全屏打开，效果与官方预览一致。",
       },
       {
-        heading: "交互与飞线",
-        body: "Raycaster 做悬停高亮；城际飞线用二次贝塞尔曲线 + 沿曲线运动的点，模拟跨区域流向——先假数据，后续可接真实业务指标。",
+        heading: "江苏定制",
+        body: "地理数据换为阿里云 DataV 江苏省/市界；贴图按江苏轮廓重新烘焙；城市标注与示例图表改为南京、苏州等。面试时可说明：框架来自开源项目，区域数据与资源为本地定制。",
       },
       {
-        heading: "和 sc-datav 的关系",
-        body: "灵感来自 sc-datav 的 3D 大屏路线（Three.js + 地理轮廓），本 Demo 改为全国省级，并做成可嵌入 Lab 的单页体验，未整仓引入其依赖。",
+        heading: "归属说明",
+        body: "渲染框架来自开源项目 knight-L/sc-datav（Apache-2.0）。本站做静态托管、江苏数据替换与作品集入口。",
       },
     ],
-    useCases: ["作品集展示数据可视化兴趣", "讲解 GeoJSON → 3D 管线", "后续扩展省下钻 / 真实指标大屏"],
-    techStack: ["Three.js", "GeoJSON", "OrbitControls", "Raycaster"],
+    useCases: ["作品集展示数据大屏方向", "学习 Three.js 地理可视化结构", "本地化省市数据替换实践"],
+    techStack: ["Three.js", "React", "ECharts", "Vite"],
   },
 ];
 

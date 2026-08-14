@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["framer-motion"],
   },
+  async rewrites() {
+    return [
+      // public/sc-datav/index.html：避免 /sc-datav → 404（Next 会去掉尾斜杠）
+      { source: "/sc-datav", destination: "/sc-datav/index.html" },
+    ];
+  },
   async headers() {
     return [
       {

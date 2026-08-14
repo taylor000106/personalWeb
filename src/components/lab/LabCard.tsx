@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { getLabOrigin, type LabEffect } from "@/data/lab-effects";
 import { useI18n } from "@/i18n/LanguageProvider";
@@ -11,6 +12,7 @@ export function LabCard({ effect }: { effect: LabEffect }) {
   const categoryLabel = t.lab.categories[effect.category];
   const origin = getLabOrigin(effect);
   const originLabel = origin === "inspired" ? t.lab.originInspired : t.lab.originOriginal;
+  const useCover = Boolean(effect.externalSite && effect.previewImage);
 
   return (
     <article className="group">
@@ -19,15 +21,26 @@ export function LabCard({ effect }: { effect: LabEffect }) {
         style={{ backgroundColor: effect.previewBg }}
       >
         <div className="relative aspect-[4/3] w-full overflow-hidden">
-          <iframe
-            src={effect.demoPath}
-            title={effect.title}
-            className={`absolute top-[58%] left-1/2 h-[520px] w-[720px] origin-center -translate-x-1/2 -translate-y-1/2 scale-[0.42] border-0 ${
-              interactive ? "pointer-events-auto" : "pointer-events-none"
-            }`}
-            loading="lazy"
-            tabIndex={interactive ? 0 : -1}
-          />
+          {useCover ? (
+            <Image
+              src={effect.previewImage!}
+              alt={effect.title}
+              fill
+              unoptimized
+              className="object-cover object-center transition-transform duration-500 group-hover:scale-[1.03]"
+              sizes="(max-width: 768px) 100vw, 33vw"
+            />
+          ) : (
+            <iframe
+              src={effect.demoPath}
+              title={effect.title}
+              className={`absolute top-[58%] left-1/2 h-[520px] w-[720px] origin-center -translate-x-1/2 -translate-y-1/2 scale-[0.42] border-0 ${
+                interactive ? "pointer-events-auto" : "pointer-events-none"
+              }`}
+              loading="lazy"
+              tabIndex={interactive ? 0 : -1}
+            />
+          )}
           <p className="pointer-events-none absolute top-3 left-3 rounded-full bg-black/55 px-2 py-0.5 text-[10px] tracking-wide text-white/90 uppercase backdrop-blur-sm">
             {categoryLabel}
             {interactive ? ` · ${t.lab.interactive}` : ""}

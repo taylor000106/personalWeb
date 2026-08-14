@@ -28,8 +28,9 @@ export default async function LabDetailPage({ params }: PageProps) {
   if (!effect) notFound();
 
   const origin = getLabOrigin(effect);
-  const interactionHint =
-    effect.slug === "shy-bird-3d"
+  const interactionHint = effect.externalSite
+    ? "这是独立数据大屏子站，请点击下方按钮全屏打开（iframe 放不下完整 WebGL 效果）。"
+    : effect.slug === "shy-bird-3d"
       ? "在下方区域内移动鼠标：中间的小鸟会看你的光标，盯太久两侧的小鸟会害羞转头。"
       : effect.slug === "hobbiton-hero"
         ? "在下方区域内向下滚动页面，触发镜头推进与标题显现。"
@@ -67,11 +68,20 @@ export default async function LabDetailPage({ params }: PageProps) {
           style={{ backgroundColor: effect.previewBg }}
         >
           <div className="relative aspect-video w-full min-h-[280px] md:min-h-[360px]">
-            <DemoFrame
-              src={effect.demoPath}
-              title={effect.title}
-              className="absolute inset-0"
-            />
+            {effect.externalSite && effect.previewImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={effect.previewImage}
+                alt={effect.title}
+                className="absolute inset-0 h-full w-full object-cover object-top"
+              />
+            ) : (
+              <DemoFrame
+                src={effect.demoPath}
+                title={effect.title}
+                className="absolute inset-0"
+              />
+            )}
           </div>
           <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 bg-black/30 px-4 py-3 backdrop-blur-sm">
             <p className="text-xs text-zinc-400">{interactionHint}</p>
@@ -81,7 +91,7 @@ export default async function LabDetailPage({ params }: PageProps) {
               rel="noreferrer"
               className="rounded-full bg-white px-4 py-1.5 text-sm font-medium text-black transition-colors hover:bg-violet-100"
             >
-              全屏打开演示
+              {effect.externalSite ? "打开完整大屏子站" : "全屏打开演示"}
             </a>
           </div>
         </div>
@@ -165,12 +175,28 @@ export default async function LabDetailPage({ params }: PageProps) {
 
         <section className="mt-12">
           <div className="mb-4 flex items-end justify-between gap-4">
-            <h2 className="text-lg font-semibold text-violet-200">完整源码</h2>
+            <h2 className="text-lg font-semibold text-violet-200">
+              {effect.externalSite ? "源码仓库" : "完整源码"}
+            </h2>
             <Link href="/lab" className="text-sm text-zinc-500 hover:text-white">
               ← 更多实验
             </Link>
           </div>
-          <CodeViewer src={effect.demoPath} />
+          {effect.externalSite && effect.source ? (
+            <div className="rounded-xl border border-white/10 bg-white/[0.03] p-5 text-sm text-zinc-400">
+              <p>本条目为开源大屏的静态托管入口，完整源码请查看原仓库：</p>
+              <a
+                href={effect.source.url}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-block text-violet-300 hover:underline"
+              >
+                {effect.source.name} →
+              </a>
+            </div>
+          ) : (
+            <CodeViewer src={effect.demoPath} />
+          )}
         </section>
       </main>
     </LabShell>
