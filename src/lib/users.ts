@@ -25,12 +25,12 @@ const SEED_USERS: Array<{
 }> = [
   {
     email: "taylor000106@gmail.com",
-    passwordHash: "$2b$12$Ysxwg26HIGlOvqNYf61Eb.B1iiUyCtE50.N0B/JMGsMzhi5MPclo.",
+    passwordHash: "$2b$12$bU71azkRztr/EG0dA9IQueEVlqERNPdrhV6ePGS/IEjY4i1CcGIPy",
     role: "admin",
   },
   {
     email: "yyw211202@gmail.com",
-    passwordHash: "$2b$12$Ysxwg26HIGlOvqNYf61Eb.B1iiUyCtE50.N0B/JMGsMzhi5MPclo.",
+    passwordHash: "$2b$12$bU71azkRztr/EG0dA9IQueEVlqERNPdrhV6ePGS/IEjY4i1CcGIPy",
     role: "admin",
   },
   {

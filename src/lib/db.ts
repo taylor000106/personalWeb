@@ -56,6 +56,15 @@ function initSchema(database: Database.Database) {
       detail TEXT NOT NULL DEFAULT '',
       created_at TEXT NOT NULL
     );
+
+    CREATE TABLE IF NOT EXISTS todos (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      done INTEGER NOT NULL DEFAULT 0,
+      created_by TEXT NOT NULL DEFAULT '',
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
   `);
 
   ensureUsersTable(database);
@@ -77,4 +86,13 @@ export type LinkItem = {
   url: string;
   description: string;
   created_at: string;
+};
+
+export type TodoItem = {
+  id: string;
+  title: string;
+  done: number;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
 };

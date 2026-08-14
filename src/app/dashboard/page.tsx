@@ -1,8 +1,15 @@
 import Link from "next/link";
+import { getSession } from "@/lib/auth";
 import { getContentInventory } from "@/lib/content-stats";
-import { getDashboardStats, listRecentActivity } from "@/lib/repositories";
+import {
+  getDashboardStats,
+  listOpenTodos,
+  listRecentActivity,
+  listRecentLinks,
+  listRecentNotes,
+} from "@/lib/repositories";
 
-export const metadata = { title: "Overview" };
+export const metadata = { title: "概览" };
 export const dynamic = "force-dynamic";
 
 const actionLabel: Record<string, string> = {
@@ -15,85 +22,141 @@ const entityLabel: Record<string, string> = {
   note: "笔记",
   link: "链接",
   profile: "资料",
+  todo: "待办",
 };
 
-export default function DashboardHome() {
+function greeting(now = new Date()) {
+  const hour = now.getHours();
+  if (hour < 11) return "早上好";
+  if (hour < 14) return "中午好";
+  if (hour < 18) return "下午好";
+  return "晚上好";
+}
+
+export default async function DashboardHome() {
+  const session = await getSession();
   const stats = getDashboardStats();
-  const recent = listRecentActivity(8);
+  const recent = listRecentActivity(6);
+  const notes = listRecentNotes(4);
+  const links = listRecentLinks(4);
+  const todos = listOpenTodos(5);
   const content = getContentInventory();
+  const readOnly = session?.role === "demo";
+  const name = session?.email?.split("@")[0] ?? "朋友";
 
   return (
     <div>
-      <h1 className="text-2xl font-bold">概览</h1>
-      <p className="mt-2 text-zinc-600">
-        私人面板（SQLite）与公开内容（Git / Markdown）分开：不引入 Prisma 全量
-        CMS，保持个人站可维护。
-      </p>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">
+            {greeting()}，{name}
+          </h1>
+          <p className="mt-2 max-w-2xl text-zinc-600">
+            这是你们的共享私人空间：待办一起记，笔记和链接各自沉淀，公开站点内容在下方一眼看到。
+          </p>
+        </div>
+        {readOnly ? null : (
+          <div className="flex flex-wrap gap-2">
+            <QuickLink href="/dashboard/todos" label="加待办" />
+            <QuickLink href="/dashboard/notes" label="写笔记" />
+            <QuickLink href="/dashboard/links" label="收藏链接" />
+          </div>
+        )}
+      </div>
 
-      <h2 className="mt-8 text-sm font-semibold tracking-wide text-zinc-500 uppercase">
-        私人数据
-      </h2>
-      <div className="mt-3 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard
+          label="待办进行中"
+          value={stats.todosOpen}
+          hint={`共 ${stats.todosTotal} 条`}
+          href="/dashboard/todos"
+        />
         <StatCard label="笔记" value={stats.notes} href="/dashboard/notes" />
         <StatCard label="链接" value={stats.links} href="/dashboard/links" />
-        <StatCard label="活动" value={stats.activities} href="/dashboard" />
+        <StatCard label="近期活动" value={stats.activities} href="/dashboard" />
       </div>
 
-      <h2 className="mt-10 text-sm font-semibold tracking-wide text-zinc-500 uppercase">
-        公开内容平台（只读）
-      </h2>
-      <div className="mt-3 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <InfoCard
-          label="Featured 项目"
-          value={`${content.projects.featured} / ${content.projects.total}`}
-          hint="编辑 src/content/projects.ts"
-        />
-        <InfoCard
-          label="知识库文档"
-          value={String(content.knowledge.docs)}
-          hint={content.knowledge.files.join(" · ")}
-        />
-        <InfoCard
-          label="Lab 实验"
-          value={String(content.lab.total)}
-          hint={`原创 ${content.lab.original} · 社区灵感 ${content.lab.inspired}`}
-        />
-        <InfoCard
-          label="Articles 入口"
-          value={`${content.articles.live} live`}
-          hint="编辑 src/content/articles/"
-        />
-      </div>
-
-      <div className="mt-10 grid gap-6 lg:grid-cols-2">
-        <section className="rounded-xl border border-zinc-200 bg-zinc-50 p-6">
-          <h2 className="font-semibold">架构边界</h2>
-          <ul className="mt-3 list-inside list-disc space-y-1 text-sm text-zinc-600">
-            <li>公开 Portfolio / Lab / AI 知识库 → Git 内容层，发版即更新</li>
-            <li>私人笔记 / 链接 / 资料 → SQLite + JWT，不进仓库</li>
-            <li>不上 Prisma：表少、单人、SQL 已够用</li>
-            <li>
-              访客入口：
-              <Link href="/" className="text-violet-700 hover:underline">
-                首页
-              </Link>
-              {" · "}
-              <Link href="/lab" className="text-violet-700 hover:underline">
-                Lab
-              </Link>
-              {" · "}
-              <Link href="/assistant" className="text-violet-700 hover:underline">
-                AI 助手
-              </Link>
-            </li>
-          </ul>
+      <div className="mt-8 grid gap-6 xl:grid-cols-3">
+        <section className="rounded-xl border border-zinc-200 p-5 xl:col-span-1">
+          <SectionHeader title="共享待办" href="/dashboard/todos" />
+          {todos.length === 0 ? (
+            <Empty
+              text="还没有待办。"
+              actionHref={readOnly ? undefined : "/dashboard/todos"}
+              actionLabel="去添加"
+            />
+          ) : (
+            <ul className="mt-3 space-y-2">
+              {todos.map((todo) => (
+                <li
+                  key={todo.id}
+                  className="rounded-lg border border-zinc-100 bg-zinc-50 px-3 py-2 text-sm text-zinc-800"
+                >
+                  {todo.title}
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
 
-        <section className="rounded-xl border border-zinc-200 p-6">
+        <section className="rounded-xl border border-zinc-200 p-5 xl:col-span-1">
+          <SectionHeader title="最近笔记" href="/dashboard/notes" />
+          {notes.length === 0 ? (
+            <Empty
+              text="还没有笔记。"
+              actionHref={readOnly ? undefined : "/dashboard/notes"}
+              actionLabel="去写一条"
+            />
+          ) : (
+            <ul className="mt-3 space-y-3">
+              {notes.map((note) => (
+                <li key={note.id} className="border-b border-zinc-100 pb-3 last:border-0">
+                  <p className="text-sm font-medium text-zinc-900">{note.title}</p>
+                  {note.content ? (
+                    <p className="mt-1 line-clamp-2 text-xs text-zinc-500">
+                      {note.content}
+                    </p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+
+        <section className="rounded-xl border border-zinc-200 p-5 xl:col-span-1">
+          <SectionHeader title="最近链接" href="/dashboard/links" />
+          {links.length === 0 ? (
+            <Empty
+              text="还没有收藏。"
+              actionHref={readOnly ? undefined : "/dashboard/links"}
+              actionLabel="去收藏"
+            />
+          ) : (
+            <ul className="mt-3 space-y-3">
+              {links.map((link) => (
+                <li key={link.id} className="border-b border-zinc-100 pb-3 last:border-0">
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-sm font-medium text-violet-700 hover:underline"
+                  >
+                    {link.title}
+                  </a>
+                  <p className="mt-1 truncate text-xs text-zinc-500">{link.url}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
+        <section className="rounded-xl border border-zinc-200 p-5">
           <h2 className="font-semibold">最近活动</h2>
           {recent.length === 0 ? (
             <p className="mt-3 text-sm text-zinc-500">
-              暂无活动，先写一条笔记或收藏链接。
+              暂无活动，先写一条笔记或加一条待办。
             </p>
           ) : (
             <ul className="mt-3 space-y-3">
@@ -108,14 +171,82 @@ export default function DashboardHome() {
                     {item.detail ? ` · ${item.detail}` : ""}
                   </p>
                   <p className="mt-1 text-xs text-zinc-400">
-                    {new Date(item.created_at).toLocaleString()}
+                    {new Date(item.created_at).toLocaleString("zh-CN")}
                   </p>
                 </li>
               ))}
             </ul>
           )}
         </section>
+
+        <section className="rounded-xl border border-zinc-200 bg-zinc-50 p-5">
+          <h2 className="font-semibold">公开站快捷入口</h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            <PublicLink href="/" label="首页" desc="作品集主页" />
+            <PublicLink href="/lab" label="Lab" desc={`${content.lab.total} 个实验`} />
+            <PublicLink
+              href="/assistant"
+              label="AI 助手"
+              desc={`${content.knowledge.docs} 篇知识库`}
+            />
+            <PublicLink
+              href="/#projects"
+              label="项目"
+              desc={`${content.projects.featured} Featured`}
+            />
+          </div>
+          <p className="mt-4 text-xs leading-relaxed text-zinc-500">
+            公开内容走 Git（项目 / Lab / 文章）；私人内容走 SQLite（待办 / 笔记 /
+            链接），两边分开维护。
+          </p>
+        </section>
       </div>
+    </div>
+  );
+}
+
+function QuickLink({ href, label }: { href: string; label: string }) {
+  return (
+    <Link
+      href={href}
+      className="rounded-full bg-zinc-900 px-4 py-2 text-sm text-white hover:bg-zinc-700"
+    >
+      {label}
+    </Link>
+  );
+}
+
+function SectionHeader({ title, href }: { title: string; href: string }) {
+  return (
+    <div className="flex items-center justify-between gap-3">
+      <h2 className="font-semibold">{title}</h2>
+      <Link href={href} className="text-xs text-violet-700 hover:underline">
+        查看全部
+      </Link>
+    </div>
+  );
+}
+
+function Empty({
+  text,
+  actionHref,
+  actionLabel,
+}: {
+  text: string;
+  actionHref?: string;
+  actionLabel?: string;
+}) {
+  return (
+    <div className="mt-3 rounded-lg border border-dashed border-zinc-200 px-4 py-6 text-sm text-zinc-500">
+      <p>{text}</p>
+      {actionHref && actionLabel ? (
+        <Link
+          href={actionHref}
+          className="mt-2 inline-block text-violet-700 hover:underline"
+        >
+          {actionLabel} →
+        </Link>
+      ) : null}
     </div>
   );
 }
@@ -124,36 +255,41 @@ function StatCard({
   label,
   value,
   href,
+  hint,
 }: {
   label: string;
   value: number;
   href: string;
+  hint?: string;
 }) {
   return (
     <Link
       href={href}
-      className="block rounded-xl border border-zinc-200 p-6 transition-shadow hover:shadow-md"
+      className="block rounded-xl border border-zinc-200 p-5 transition-shadow hover:shadow-md"
     >
       <p className="text-sm text-zinc-500">{label}</p>
-      <p className="mt-2 text-4xl font-bold">{value}</p>
+      <p className="mt-2 text-3xl font-bold">{value}</p>
+      {hint ? <p className="mt-1 text-xs text-zinc-400">{hint}</p> : null}
     </Link>
   );
 }
 
-function InfoCard({
+function PublicLink({
+  href,
   label,
-  value,
-  hint,
+  desc,
 }: {
+  href: string;
   label: string;
-  value: string;
-  hint: string;
+  desc: string;
 }) {
   return (
-    <div className="rounded-xl border border-zinc-200 p-5">
-      <p className="text-sm text-zinc-500">{label}</p>
-      <p className="mt-2 text-2xl font-bold text-zinc-900">{value}</p>
-      <p className="mt-2 text-xs leading-relaxed text-zinc-500">{hint}</p>
-    </div>
+    <Link
+      href={href}
+      className="rounded-lg border border-zinc-200 bg-white px-4 py-3 transition-colors hover:border-zinc-300"
+    >
+      <p className="text-sm font-medium text-zinc-900">{label}</p>
+      <p className="mt-1 text-xs text-zinc-500">{desc}</p>
+    </Link>
   );
 }

@@ -6,6 +6,7 @@ import type { UserRole } from "@/lib/users";
 
 const links = [
   { href: "/dashboard", label: "概览" },
+  { href: "/dashboard/todos", label: "待办" },
   { href: "/dashboard/notes", label: "笔记" },
   { href: "/dashboard/links", label: "链接" },
   { href: "/dashboard/profile", label: "资料" },

@@ -1,8 +1,14 @@
-import { getDb, type LinkItem, type Note } from "@/lib/db";
+import { getDb, type LinkItem, type Note, type TodoItem } from "@/lib/db";
 import { v4 as uuid } from "uuid";
 
 export function listNotes(): Note[] {
   return getDb().prepare("SELECT * FROM notes ORDER BY updated_at DESC").all() as Note[];
+}
+
+export function listRecentNotes(limit = 5): Note[] {
+  return getDb()
+    .prepare("SELECT * FROM notes ORDER BY updated_at DESC LIMIT ?")
+    .all(limit) as Note[];
 }
 
 export function createNote(input: {
@@ -57,6 +63,12 @@ export function listLinks(): LinkItem[] {
     .all() as LinkItem[];
 }
 
+export function listRecentLinks(limit = 5): LinkItem[] {
+  return getDb()
+    .prepare("SELECT * FROM links ORDER BY created_at DESC LIMIT ?")
+    .all(limit) as LinkItem[];
+}
+
 export function createLink(input: {
   title: string;
   url: string;
@@ -85,6 +97,58 @@ export function deleteLink(id: string): boolean {
 
 export function countLinks(): number {
   return (getDb().prepare("SELECT COUNT(*) as c FROM links").get() as { c: number }).c;
+}
+
+export function listTodos(): TodoItem[] {
+  return getDb()
+    .prepare("SELECT * FROM todos ORDER BY done ASC, updated_at DESC")
+    .all() as TodoItem[];
+}
+
+export function listOpenTodos(limit = 6): TodoItem[] {
+  return getDb()
+    .prepare("SELECT * FROM todos WHERE done = 0 ORDER BY updated_at DESC LIMIT ?")
+    .all(limit) as TodoItem[];
+}
+
+export function createTodo(input: { title: string; createdBy: string }): TodoItem {
+  const now = new Date().toISOString();
+  const id = uuid();
+  getDb()
+    .prepare(
+      "INSERT INTO todos (id, title, done, created_by, created_at, updated_at) VALUES (?, ?, 0, ?, ?, ?)",
+    )
+    .run(id, input.title, input.createdBy, now, now);
+  return {
+    id,
+    title: input.title,
+    done: 0,
+    created_by: input.createdBy,
+    created_at: now,
+    updated_at: now,
+  };
+}
+
+export function setTodoDone(id: string, done: boolean): boolean {
+  const now = new Date().toISOString();
+  const result = getDb()
+    .prepare("UPDATE todos SET done = ?, updated_at = ? WHERE id = ?")
+    .run(done ? 1 : 0, now, id);
+  return result.changes > 0;
+}
+
+export function deleteTodo(id: string): boolean {
+  const result = getDb().prepare("DELETE FROM todos WHERE id = ?").run(id);
+  return result.changes > 0;
+}
+
+export function countTodos() {
+  const row = getDb()
+    .prepare(
+      "SELECT COUNT(*) as total, SUM(CASE WHEN done = 0 THEN 1 ELSE 0 END) as open FROM todos",
+    )
+    .get() as { total: number; open: number | null };
+  return { total: row.total, open: row.open ?? 0 };
 }
 
 export function getProfile(): Record<string, string> {
@@ -147,9 +211,12 @@ export function listRecentActivity(limit = 8): ActivityItem[] {
 }
 
 export function getDashboardStats() {
+  const todos = countTodos();
   return {
     notes: countNotes(),
     links: countLinks(),
+    todosOpen: todos.open,
+    todosTotal: todos.total,
     activities: (
       getDb().prepare("SELECT COUNT(*) as c FROM activity_log").get() as { c: number }
     ).c,
