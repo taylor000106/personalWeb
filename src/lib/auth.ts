@@ -1,13 +1,20 @@
 import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
+import {
+  adminPasswordConfigError,
+  isBcryptHash,
+  normalizeAdminPassword,
+} from "@/lib/admin-password";
+import { getDb } from "@/lib/db";
+import { findUserByEmail, type UserRole } from "@/lib/users";
 
 const COOKIE_NAME = "yyw_session";
 const MAX_AGE = 60 * 60 * 24 * 30;
 
 export type SessionPayload = {
   email: string;
-  role: "admin";
+  role: UserRole;
 };
 
 function getSecret() {
@@ -18,32 +25,40 @@ function getSecret() {
   return new TextEncoder().encode(secret);
 }
 
-function isBcryptHash(value: string) {
-  return /^\$2[aby]?\$\d{2}\$/.test(value);
+function isUserRole(value: unknown): value is UserRole {
+  return value === "admin" || value === "demo";
 }
 
-/** Quotes + leftover `\$` from .env escaping (Next expands unescaped `$`). */
-function normalizeAdminPassword(value: string) {
-  return value
-    .trim()
-    .replace(/^["']|["']$/g, "")
-    .replace(/\\\$/g, "$");
-}
-
+/** Prefer SQLite users; fall back to legacy ADMIN_EMAIL / ADMIN_PASSWORD env. */
 export async function verifyCredentials(email: string, password: string) {
-  const adminEmail = process.env.ADMIN_EMAIL?.trim();
-  const adminPassword = normalizeAdminPassword(process.env.ADMIN_PASSWORD ?? "");
+  const normalizedEmail = email.trim().toLowerCase();
+  const dbUser = findUserByEmail(getDb(), normalizedEmail);
+
+  if (dbUser) {
+    if (!isBcryptHash(dbUser.password_hash)) {
+      return { ok: false as const, error: "User password hash is invalid" };
+    }
+    const match = await bcrypt.compare(password, dbUser.password_hash);
+    if (!match) {
+      return { ok: false as const, error: "Invalid email or password" };
+    }
+    return { ok: true as const, role: dbUser.role };
+  }
+
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+  const rawAdminPassword = process.env.ADMIN_PASSWORD ?? "";
+  const adminPassword = normalizeAdminPassword(rawAdminPassword);
+
   if (!adminEmail || !adminPassword) {
-    return { ok: false as const, error: "Admin account is not configured" };
+    return { ok: false as const, error: "Invalid email or password" };
   }
   if (!isBcryptHash(adminPassword)) {
     return {
       ok: false as const,
-      error:
-        "ADMIN_PASSWORD must be a bcrypt hash. Escape $ as \\$ in .env.local, then restart.",
+      error: adminPasswordConfigError(rawAdminPassword, adminPassword),
     };
   }
-  if (email.trim().toLowerCase() !== adminEmail.toLowerCase()) {
+  if (normalizedEmail !== adminEmail) {
     return { ok: false as const, error: "Invalid email or password" };
   }
   const match = await bcrypt.compare(password, adminPassword);
@@ -53,11 +68,15 @@ export async function verifyCredentials(email: string, password: string) {
   return { ok: true as const, role: "admin" as const };
 }
 
-export async function createSession(email: string, remember: boolean) {
+export async function createSession(
+  email: string,
+  remember: boolean,
+  role: UserRole = "admin",
+) {
   const maxAge = remember ? MAX_AGE : 60 * 60 * 24;
   const token = await new SignJWT({
     email,
-    role: "admin" satisfies SessionPayload["role"],
+    role,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -87,7 +106,7 @@ export async function getSession(): Promise<SessionPayload | null> {
     const { payload } = await jwtVerify(token, getSecret());
     const email = payload.email;
     if (typeof email !== "string") return null;
-    const role = "admin" as const;
+    const role = isUserRole(payload.role) ? payload.role : "admin";
     return { email, role };
   } catch {
     return null;

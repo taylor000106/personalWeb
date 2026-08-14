@@ -1,4 +1,4 @@
-import { parseJsonBody, requireApiSession } from "@/lib/api";
+import { parseJsonBody, requireApiAdmin, requireApiSession } from "@/lib/api";
 import {
   createNote,
   deleteNote,
@@ -22,7 +22,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
-  const auth = await requireApiSession();
+  const auth = await requireApiAdmin();
   if (!auth.ok) return auth.response;
 
   const parsed = await parseJsonBody(request, noteCreateSchema);
@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireApiSession();
+  const auth = await requireApiAdmin();
   if (!auth.ok) return auth.response;
 
   const parsed = await parseJsonBody(request, noteUpdateSchema);
@@ -59,7 +59,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const auth = await requireApiSession();
+  const auth = await requireApiAdmin();
   if (!auth.ok) return auth.response;
 
   const { searchParams } = new URL(request.url);

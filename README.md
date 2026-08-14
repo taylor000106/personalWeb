@@ -75,7 +75,9 @@ npm run dev
 NEXT_PUBLIC_SITE_NAME=Taylor
 NEXT_PUBLIC_SITE_URL=https://yywtaylor.cyou
 ADMIN_EMAIL=你的邮箱
-ADMIN_PASSWORD=强密码
+# 必须是 bcrypt，不要写明文。本机生成：npm run hash-password -- 你的密码
+# 生产推荐粘贴脚本输出的 b64: 那一行（避免 $ 被 Docker 吃掉）
+ADMIN_PASSWORD=b64:脚本生成的内容
 AUTH_SECRET=用 openssl rand -base64 32 生成
 ```
 
@@ -114,7 +116,7 @@ tar -czf backup-$(date +%F).tar.gz data/
 
 - 这是**单人站点**：仅 `.env` 里配置的一个账号可登录，无公开注册。
 - 切勿把 `.env` 提交到 Git。
-- `AUTH_SECRET` 与 `ADMIN_PASSWORD` 务必使用强随机值。
+- `AUTH_SECRET` 用强随机值；`ADMIN_PASSWORD` 必须是 bcrypt（推荐 `b64:...`），不要写登录明文。
 - 3X-UI / Xray 面板与网站建议不同端口、不同路径，并限制面板访问 IP。
 
 ## 技术栈

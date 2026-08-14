@@ -7,9 +7,19 @@ if (!password) {
 }
 
 const hash = await bcrypt.hash(password, 12);
-const escaped = hash.replaceAll("$", "\\$");
-console.log("\nPut this into .env.local (escaped for Next.js):\n");
-console.log(`ADMIN_PASSWORD=${escaped}`);
-console.log("\nRaw hash (do not paste unescaped into .env):\n");
+const nextEscaped = hash.replaceAll("$", "\\$");
+const composeEscaped = hash.replaceAll("$", () => "$$");
+const b64 = Buffer.from(hash, "utf8").toString("base64");
+
+console.log("\n=== Recommended (works in Next.js + Docker, no $ escaping) ===\n");
+console.log(`ADMIN_PASSWORD=b64:${b64}`);
+
+console.log("\n=== Or: Next.js .env.local (escape $ as \\$) ===\n");
+console.log(`ADMIN_PASSWORD=${nextEscaped}`);
+
+console.log("\n=== Or: Docker Compose .env (escape $ as $$) ===\n");
+console.log(`ADMIN_PASSWORD=${composeEscaped}`);
+
+console.log("\n=== Raw hash (debug only) ===\n");
 console.log(hash);
 console.log("");

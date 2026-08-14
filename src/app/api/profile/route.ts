@@ -1,4 +1,4 @@
-import { parseJsonBody, requireApiSession } from "@/lib/api";
+import { parseJsonBody, requireApiAdmin, requireApiSession } from "@/lib/api";
 import { getProfile, logActivity, updateProfile } from "@/lib/repositories";
 import { PROFILE_KEYS, profileUpdateSchema } from "@/lib/validations/profile";
 import { NextResponse } from "next/server";
@@ -12,7 +12,7 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
-  const auth = await requireApiSession();
+  const auth = await requireApiAdmin();
   if (!auth.ok) return auth.response;
 
   const parsed = await parseJsonBody(request, profileUpdateSchema);

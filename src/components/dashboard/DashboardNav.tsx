@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import type { UserRole } from "@/lib/users";
 
 const links = [
   { href: "/dashboard", label: "概览" },
@@ -10,7 +11,7 @@ const links = [
   { href: "/dashboard/profile", label: "资料" },
 ];
 
-export function DashboardNav({ email }: { email: string }) {
+export function DashboardNav({ email, role }: { email: string; role: UserRole }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -24,9 +25,10 @@ export function DashboardNav({ email }: { email: string }) {
     <aside className="flex w-full flex-col border-b border-zinc-200 bg-zinc-50 md:min-h-screen md:w-56 md:border-b-0 md:border-r">
       <div className="p-5">
         <p className="text-xs font-medium uppercase tracking-wider text-zinc-500">
-          私人空间
+          {role === "demo" ? "演示空间" : "私人空间"}
         </p>
         <p className="mt-1 truncate text-sm font-semibold text-zinc-900">{email}</p>
+        {role === "demo" ? <p className="mt-1 text-xs text-amber-700">只读演示</p> : null}
       </div>
       <nav className="flex flex-1 flex-row gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:pb-0">
         {links.map((link) => {

@@ -362,6 +362,43 @@
   font-size: 14px;
 }
 
+.demoBox {
+  margin-top: 20px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px dashed #d4d4d8;
+  background: #fafafa;
+}
+
+.demoTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #71717a;
+  letter-spacing: 0.04em;
+}
+
+.demoCred {
+  margin: 6px 0 10px;
+  font-size: 13px;
+  color: #3f3f46;
+  word-break: break-all;
+}
+
+.demoBtn {
+  border: 0;
+  border-radius: 8px;
+  background: #18181b;
+  color: #fff;
+  font-size: 13px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.demoBtn:hover {
+  background: #3f3f46;
+}
+
 @media (max-width: 1024px) {
   .page {
     grid-template-columns: 1fr;

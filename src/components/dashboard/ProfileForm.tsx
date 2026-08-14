@@ -10,7 +10,7 @@ const fields = [
   { key: "email_public", label: "公开邮箱" },
 ] as const;
 
-export function ProfileForm() {
+export function ProfileForm({ readOnly = false }: { readOnly?: boolean }) {
   const [data, setData] = useState<Record<string, string>>({});
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -45,23 +45,33 @@ export function ProfileForm() {
               className="min-h-[100px] w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
               value={data[f.key] || ""}
               onChange={(e) => setData({ ...data, [f.key]: e.target.value })}
+              disabled={readOnly}
+              readOnly={readOnly}
             />
           ) : (
             <input
-              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm disabled:bg-zinc-50"
               value={data[f.key] || ""}
               onChange={(e) => setData({ ...data, [f.key]: e.target.value })}
+              disabled={readOnly}
+              readOnly={readOnly}
             />
           )}
         </div>
       ))}
-      <button
-        type="submit"
-        className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
-      >
-        保存
-      </button>
-      {saved ? <span className="ml-3 text-sm text-green-600">已保存</span> : null}
+      {readOnly ? (
+        <p className="text-sm text-zinc-500">演示账号仅可查看，不能保存修改。</p>
+      ) : (
+        <>
+          <button
+            type="submit"
+            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
+          >
+            保存
+          </button>
+          {saved ? <span className="ml-3 text-sm text-green-600">已保存</span> : null}
+        </>
+      )}
     </form>
   );
 }

@@ -1,8 +1,12 @@
 import { ProfileForm } from "@/components/dashboard/ProfileForm";
+import { getSession } from "@/lib/auth";
 
 export const metadata = { title: "资料" };
 
-export default function ProfilePage() {
+export default async function ProfilePage() {
+  const session = await getSession();
+  const readOnly = session?.role === "demo";
+
   return (
     <div>
       <h1 className="text-2xl font-bold">个人资料</h1>
@@ -10,7 +14,7 @@ export default function ProfilePage() {
         可在此保存展示用信息（未来可接到公开页）。
       </p>
       <div className="mt-6 max-w-lg">
-        <ProfileForm />
+        <ProfileForm readOnly={readOnly} />
       </div>
     </div>
   );

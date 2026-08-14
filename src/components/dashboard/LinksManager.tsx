@@ -10,7 +10,7 @@ type LinkItem = {
   created_at: string;
 };
 
-export function LinksManager() {
+export function LinksManager({ readOnly = false }: { readOnly?: boolean }) {
   const [links, setLinks] = useState<LinkItem[]>([]);
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -45,37 +45,39 @@ export function LinksManager() {
   }
 
   return (
-    <div className="grid gap-8 lg:grid-cols-2">
-      <form onSubmit={add} className="space-y-3 rounded-xl border border-zinc-200 p-4">
-        <h2 className="font-semibold">添加链接</h2>
-        <input
-          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-          placeholder="名称"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-        />
-        <input
-          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-          placeholder="https://..."
-          type="url"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          required
-        />
-        <input
-          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
-          placeholder="备注（可选）"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <button
-          type="submit"
-          className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
-        >
-          添加
-        </button>
-      </form>
+    <div className={`grid gap-8 ${readOnly ? "" : "lg:grid-cols-2"}`}>
+      {readOnly ? null : (
+        <form onSubmit={add} className="space-y-3 rounded-xl border border-zinc-200 p-4">
+          <h2 className="font-semibold">添加链接</h2>
+          <input
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+            placeholder="名称"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            required
+          />
+          <input
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+            placeholder="https://..."
+            type="url"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            required
+          />
+          <input
+            className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm"
+            placeholder="备注（可选）"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="rounded-lg bg-zinc-900 px-4 py-2 text-sm text-white"
+          >
+            添加
+          </button>
+        </form>
+      )}
 
       <ul className="space-y-3">
         {links.length === 0 ? (
@@ -98,13 +100,15 @@ export function LinksManager() {
                     <p className="mt-2 text-sm text-zinc-600">{item.description}</p>
                   ) : null}
                 </div>
-                <button
-                  type="button"
-                  className="text-xs text-red-600"
-                  onClick={() => remove(item.id)}
-                >
-                  删除
-                </button>
+                {readOnly ? null : (
+                  <button
+                    type="button"
+                    className="text-xs text-red-600"
+                    onClick={() => remove(item.id)}
+                  >
+                    删除
+                  </button>
+                )}
               </div>
             </li>
           ))

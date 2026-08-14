@@ -1,6 +1,7 @@
 import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
+import { ensureUsersTable, seedUsers } from "@/lib/users";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 const DB_PATH = path.join(DATA_DIR, "site.db");
@@ -56,6 +57,9 @@ function initSchema(database: Database.Database) {
       created_at TEXT NOT NULL
     );
   `);
+
+  ensureUsersTable(database);
+  seedUsers(database);
 }
 
 export type Note = {

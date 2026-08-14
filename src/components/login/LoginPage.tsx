@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useCallback, useState } from "react";
+import { DEMO_ACCOUNT } from "@/lib/demo-account";
 import { LoginCharacters } from "./LoginCharacters";
 import styles from "./login.module.css";
 
@@ -17,6 +18,8 @@ export function LoginPage() {
   const [lookingAtEachOther, setLookingAtEachOther] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const triggerLookAtEachOther = useCallback(() => {
     setLookingAtEachOther(true);
@@ -30,15 +33,19 @@ export function LoginPage() {
 
   const onBlurField = () => setIsTyping(false);
 
+  function fillDemo() {
+    setEmail(DEMO_ACCOUNT.email);
+    setPassword(DEMO_ACCOUNT.password);
+    setPasswordLen(DEMO_ACCOUNT.password.length);
+    setError("");
+  }
+
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    const form = new FormData(e.currentTarget);
-    const email = String(form.get("email") || "");
-    const password = String(form.get("password") || "");
-    const remember = form.get("remember") === "on";
+    const remember = new FormData(e.currentTarget).get("remember") === "on";
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -85,6 +92,8 @@ export function LoginPage() {
                 placeholder="you@example.com"
                 autoComplete="username"
                 required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 onFocus={onFocusField}
                 onBlur={onBlurField}
               />
@@ -99,9 +108,13 @@ export function LoginPage() {
                   placeholder="••••••••"
                   autoComplete="current-password"
                   required
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setPasswordLen(e.target.value.length);
+                  }}
                   onFocus={onFocusField}
                   onBlur={onBlurField}
-                  onInput={(e) => setPasswordLen(e.currentTarget.value.length)}
                 />
                 <button
                   type="button"
@@ -158,7 +171,7 @@ export function LoginPage() {
               <span
                 className={styles.forgot}
                 style={{ opacity: 0.5, cursor: "default" }}
-                title="单人站点，请妥善保管密码"
+                title="请妥善保管密码"
               >
                 忘记密码？
               </span>
@@ -186,6 +199,15 @@ export function LoginPage() {
               </div>
             </button>
           </form>
+          <div className={styles.demoBox}>
+            <p className={styles.demoTitle}>演示账号（只读）</p>
+            <p className={styles.demoCred}>
+              {DEMO_ACCOUNT.email} / {DEMO_ACCOUNT.password}
+            </p>
+            <button type="button" className={styles.demoBtn} onClick={fillDemo}>
+              一键填入演示账号
+            </button>
+          </div>
           <div className={styles.divider}>
             先逛逛？
             <Link href="/" className={styles.guestLink}>

@@ -35,8 +35,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: result.error }, { status: 401 });
     }
 
-    await createSession(parsed.data.email, Boolean(parsed.data.remember));
-    return NextResponse.json({ ok: true });
+    await createSession(parsed.data.email, Boolean(parsed.data.remember), result.role);
+    return NextResponse.json({ ok: true, role: result.role });
   } catch (e) {
     console.error(e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
