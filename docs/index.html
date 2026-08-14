@@ -1,0 +1,837 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>奚佳琦 · 前端开发工程师简历</title>
+    <style>
+      /* 中文 A4 单列求职简历 · 打印优先 */
+      :root {
+        --bg: #ffffff;
+        --ink: #111111;
+        --text: #333333;
+        --muted: #666666;
+        --soft: #888888;
+        --hint: #999999;
+        --line: #e5e7eb;
+        --wash: #f8f9fa;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      html,
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+        color: var(--text);
+        background: #eceff3;
+        font-size: 10.5pt;
+        line-height: 1.7;
+      }
+
+      .no-print {
+        position: sticky;
+        top: 0;
+        z-index: 50;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 10px 16px;
+        background: #111;
+        color: #fff;
+        font-size: 13px;
+      }
+
+      .no-print button {
+        border: 0;
+        background: #fff;
+        color: #111;
+        font-weight: 600;
+        padding: 7px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: inherit;
+      }
+
+      .sheet {
+        width: 210mm;
+        min-height: 297mm;
+        margin: 20px auto;
+        padding: 12mm 14mm;
+        background: var(--bg);
+        color: var(--text);
+        box-shadow:
+          0 1px 0 rgba(0, 0, 0, 0.04),
+          0 12px 40px rgba(17, 17, 17, 0.08);
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 18px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--line);
+        margin-bottom: 22px;
+      }
+
+      .header-main {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .name {
+        font-size: 30px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        color: var(--ink);
+        line-height: 1.2;
+      }
+
+      .role-row {
+        margin-top: 6px;
+        display: flex;
+        align-items: baseline;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .role {
+        font-size: 15px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      .salary {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      .role-en {
+        margin-top: 2px;
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--hint);
+      }
+
+      .tagline {
+        margin-top: 8px;
+        font-size: 11.5px;
+        color: var(--muted);
+      }
+
+      .contacts {
+        margin-top: 8px;
+        font-size: 10.5px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .contacts a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: none;
+      }
+
+      .avatar {
+        width: 86px;
+        height: 114px;
+        flex-shrink: 0;
+        border-radius: 6px;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid var(--line);
+      }
+
+      .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+      }
+
+      .avatar-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 11px;
+        color: var(--hint);
+        letter-spacing: 0.08em;
+        background: var(--wash);
+        border: 1px dashed var(--line);
+        border-radius: 6px;
+      }
+
+      /* 无照片时不占位，避免顶部右侧空洞 */
+      .avatar:not(.has-photo) {
+        display: none;
+      }
+
+      .avatar.has-photo .avatar-placeholder {
+        display: none;
+      }
+
+      section {
+        margin-bottom: 22px;
+      }
+
+      .sec-head {
+        margin-bottom: 10px;
+      }
+
+      .sec-head .en {
+        display: block;
+        font-size: 8.5px;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--hint);
+        margin-bottom: 4px;
+        line-height: 1.2;
+      }
+
+      /* 模块标题条：灰底 + 右侧细缝 + 末端竖条 */
+      .sec-title-bar {
+        display: inline-flex;
+        align-items: stretch;
+        gap: 5px;
+        max-width: 100%;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .sec-title-bar h2 {
+        margin: 0;
+        padding: 5px 14px 5px 12px;
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        line-height: 1.35;
+        color: #ffffff;
+        background: #666666;
+      }
+
+      .sec-title-bar::after {
+        content: "";
+        width: 6px;
+        flex-shrink: 0;
+        background: #666666;
+      }
+
+      .profile-text {
+        font-size: 10.5pt;
+        line-height: 1.7;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+
+      .tech-block + .tech-block {
+        margin-top: 7px;
+      }
+
+      .tech-label {
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--soft);
+        margin-bottom: 1px;
+      }
+
+      .tech-body {
+        font-size: 10.5pt;
+        color: var(--text);
+        line-height: 1.55;
+      }
+
+      .job {
+        margin-bottom: 14px;
+      }
+
+      .job:last-child {
+        margin-bottom: 0;
+      }
+
+      .job-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 12px;
+        margin-bottom: 2px;
+      }
+
+      .company {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .period {
+        font-size: 10.5px;
+        color: var(--soft);
+        white-space: nowrap;
+      }
+
+      .position {
+        font-size: 11.5px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+
+      .subproj {
+        margin-top: 8px;
+      }
+
+      .subproj-title {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--ink);
+      }
+
+      /* 当前公司首要项目：略加重，不另起装饰语言 */
+      .subproj.featured .subproj-title {
+        font-size: 12.5px;
+        font-weight: 700;
+      }
+
+      .subproj-tech {
+        font-size: 10px;
+        color: var(--soft);
+        margin: 2px 0 5px;
+      }
+
+      ul.bullets {
+        list-style: none;
+        padding: 0;
+      }
+
+      ul.bullets li {
+        position: relative;
+        padding-left: 12px;
+        margin-bottom: 3px;
+        font-size: 10.5pt;
+        line-height: 1.65;
+        color: var(--text);
+      }
+
+      ul.bullets li::before {
+        content: "·";
+        position: absolute;
+        left: 0;
+        color: var(--soft);
+        font-weight: 700;
+      }
+
+      .project {
+        margin-bottom: 14px;
+      }
+
+      .project-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .project-name-en {
+        font-size: 10.5px;
+        font-weight: 400;
+        color: var(--hint);
+        margin-top: 2px;
+      }
+
+      .project-desc {
+        font-size: 11.5px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .project-tech {
+        font-size: 10px;
+        color: var(--soft);
+        margin: 4px 0 6px;
+      }
+
+      .project-link {
+        font-size: 10.5px;
+        margin-bottom: 6px;
+        color: var(--muted);
+      }
+
+      .project-link a {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .edu {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      .edu-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: baseline;
+      }
+
+      .edu-school {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .edu-meta {
+        font-size: 11.5px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+
+      /* 标题尽量贴着后文；大块内容允许跨页，避免整段被推走造成空白页 */
+      .sec-head,
+      .sec-title-bar,
+      .job-head,
+      .job-top,
+      .position,
+      .subproj-title,
+      .subproj-tech,
+      .project-name,
+      .project-name-en,
+      .edu-top {
+        break-after: avoid;
+        page-break-after: avoid;
+      }
+
+      .job-head {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+
+      ul.bullets li {
+        orphans: 2;
+        widows: 2;
+      }
+
+      @media screen and (max-width: 860px) {
+        body {
+          background: var(--bg);
+        }
+
+        .sheet {
+          width: 100%;
+          min-height: auto;
+          margin: 0;
+          padding: 24px 18px 40px;
+          box-shadow: none;
+        }
+
+        .name {
+          font-size: 26px;
+        }
+
+        .avatar {
+          width: 78px;
+          height: 104px;
+        }
+      }
+
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+
+        html,
+        body {
+          background: #fff !important;
+          height: auto !important;
+          overflow: visible !important;
+          font-size: 10pt;
+          line-height: 1.55;
+        }
+
+        .sheet {
+          width: auto;
+          min-height: auto !important;
+          height: auto !important;
+          margin: 0;
+          padding: 0;
+          box-shadow: none;
+          overflow: visible !important;
+        }
+
+        /* 一律允许跨页，只保住「公司名+职位」与模块标题小块不拆 */
+        section,
+        .job,
+        .subproj,
+        .project,
+        .tech-block,
+        .edu,
+        ul.bullets li,
+        .profile-text {
+          break-inside: auto !important;
+          page-break-inside: auto !important;
+        }
+
+        .job-head,
+        .sec-title-bar,
+        .subproj-title,
+        .subproj-tech {
+          break-inside: avoid;
+          page-break-inside: avoid;
+          break-after: avoid;
+          page-break-after: avoid;
+        }
+
+        .header {
+          margin-bottom: 12px;
+          padding-bottom: 10px;
+          gap: 14px;
+        }
+
+        .name {
+          font-size: 26px;
+        }
+
+        .avatar {
+          width: 72px;
+          height: 96px;
+        }
+
+        .avatar:not(.has-photo) {
+          display: none !important;
+        }
+
+        .sec-head .en {
+          display: none;
+        }
+
+        section {
+          margin-bottom: 12px;
+        }
+
+        .sec-head {
+          margin-bottom: 7px;
+        }
+
+        .sec-title-bar h2 {
+          font-size: 13px;
+          padding: 3px 10px 3px 9px;
+        }
+
+        .sec-title-bar::after {
+          width: 5px;
+        }
+
+        .profile-text {
+          font-size: 10pt;
+          line-height: 1.5;
+          margin-bottom: 4px;
+        }
+
+        .tech-block + .tech-block {
+          margin-top: 5px;
+        }
+
+        .tech-label {
+          margin-bottom: 1px;
+        }
+
+        .tech-body {
+          line-height: 1.45;
+        }
+
+        .job {
+          margin-bottom: 10px;
+        }
+
+        .subproj {
+          margin-top: 6px;
+        }
+
+        .subproj.featured .subproj-title {
+          font-size: 12px;
+        }
+
+        .position {
+          margin-bottom: 4px;
+        }
+
+        ul.bullets li {
+          margin-bottom: 2px;
+          line-height: 1.45;
+          font-size: 10pt;
+        }
+
+        .project {
+          margin-bottom: 8px;
+        }
+
+        a {
+          color: inherit !important;
+          text-decoration: none !important;
+          border-bottom: none !important;
+        }
+
+        @page {
+          size: A4 portrait;
+          margin: 11mm 13mm;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="no-print">
+      <span>中文 A4 单列简历 · 打印时取消页眉页脚，页边距选「默认」或「无」</span>
+      <button type="button" onclick="window.print()">打印 / 保存为 PDF</button>
+    </div>
+
+    <main class="sheet">
+      <header class="header">
+        <div class="header-main">
+          <div class="name">奚佳琦</div>
+          <div class="role-row">
+            <div class="role">前端开发工程师</div>
+            <div class="salary">期望薪资 15–22K</div>
+          </div>
+          <div class="role-en">Frontend Engineer</div>
+          <div class="tagline">4 年前端开发经验 · Vue · JavaScript · Web</div>
+          <div class="contacts">
+            南京 · 15651768987 · taylor000106@gmail.com · https://yywtaylor.cyou
+          </div>
+        </div>
+        <div class="avatar has-photo" aria-label="证件照">
+          <img src="./avatar.jpg" alt="奚佳琦" />
+        </div>
+      </header>
+
+      <section>
+        <div class="sec-head">
+          <span class="en">Profile</span>
+          <div class="sec-title-bar"><h2>个人优势</h2></div>
+        </div>
+        <p class="profile-text">
+          4 年 Web 前端经验，工作以 Vue / JavaScript 为核心，覆盖 ToB 企微 SCRM、银行营销
+          H5 与 C 端 AI
+          多端对话产品；能独立完成复杂业务模块的需求开发、联调与上线。TypeScript
+          在部分项目中使用。
+        </p>
+        <ul class="bullets">
+          <li>
+            复杂 ToB 业务可落地：在企微 SCRM 从 0 到 1 落地循环群发 /
+            朋友圈，完成周期配置、主子任务与状态协同。
+          </li>
+          <li>
+            独立交付与复用：沉淀通用 H5 活动模板与移动端开发规范，支撑 10+
+            银行营销活动复用上线。
+          </li>
+          <li>
+            AI / 多端实时交互：ChatAI 多端流式对话（SSE）接入与展示；SCRM
+            参与质检、客情分析、话术助手等前端。
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <span class="en">Skills</span>
+          <div class="sec-title-bar"><h2>技术栈</h2></div>
+        </div>
+        <div class="tech-block">
+          <div class="tech-label">前端框架</div>
+          <div class="tech-body">
+            Vue 2 / Vue 3 · JavaScript · TypeScript · uni-app · Pinia · Vuex · Vite
+          </div>
+        </div>
+        <div class="tech-block">
+          <div class="tech-label">个人项目补充</div>
+          <div class="tech-body">
+            React / Next.js 15 · TypeScript · Tailwind CSS · Docker · GitHub Actions · JWT
+            · Zod
+          </div>
+        </div>
+        <div class="tech-block">
+          <div class="tech-label">UI / 跨端</div>
+          <div class="tech-body">Element Plus · Element-UI · Vant · ECharts · vw H5</div>
+        </div>
+        <div class="tech-block">
+          <div class="tech-label">实时交互 / AI</div>
+          <div class="tech-body">SSE · 大模型接口对接 · 流式对话异常处理</div>
+        </div>
+        <div class="tech-block">
+          <div class="tech-label">工程化 / 部署</div>
+          <div class="tech-body">Vitest · ESLint · Prettier · Husky · Nginx</div>
+        </div>
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <span class="en">Experience</span>
+          <div class="sec-title-bar"><h2>工作经历</h2></div>
+        </div>
+
+        <article class="job">
+          <div class="job-head">
+            <div class="job-top">
+              <div class="company">南京百珏科技有限公司</div>
+              <div class="period">2025.05 — 至今</div>
+            </div>
+            <div class="position">Web 前端开发工程师</div>
+          </div>
+
+          <div class="subproj featured">
+            <div class="subproj-title">企业微信 SCRM 运营平台（ToB SaaS）</div>
+            <div class="subproj-tech">
+              Vue3 · TypeScript · Element Plus · Pinia · ECharts
+            </div>
+            <ul class="bullets">
+              <li>
+                从 0 到 1 落地循环群发 / 朋友圈：完成周期配置（工作日 /
+                自定义日期去重排序）、主子任务编辑与字段规范化；与后端协同处理状态收口及异常明细，保障截止后状态可定位。
+              </li>
+              <li>
+                优化群发发送范围与员工预览（总客户 / 未流失 /
+                已流失分类）；员工列表采用虚拟列表，优化大数据量渲染。
+              </li>
+              <li>
+                负责 Web / App
+                双端核心业务：客户群发、SOP、客户画像、员工小店等可配置模块。
+              </li>
+              <li>
+                参与旧系统 .NET → Java 迁移中的前端适配与接口改造，协同后端完成跨栈联调。
+              </li>
+              <li>参与 AI 中台相关前端：质检、客情分析、企微端话术助手。</li>
+              <li>处理 keep-alive 缓存刷新、表单反显等中后台常见问题。</li>
+            </ul>
+          </div>
+
+          <div class="subproj">
+            <div class="subproj-title">银行营销 H5 活动</div>
+            <div class="subproj-tech">HTML/CSS/JS · vw 响应式 · Vant（按需）</div>
+            <ul class="bullets">
+              <li>
+                独立完成通用 H5
+                活动模板，并输出移动端开发规范；通过配置化渲染与模板复用，支撑 10+
+                个银行营销活动上线。
+              </li>
+              <li>
+                沉淀 config / assets 配置与通用请求层，支持 Mock
+                联调，缩短单活动从设计还原到上线的交付周期。
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job">
+          <div class="job-head">
+            <div class="job-top">
+              <div class="company">晟为数科（深圳）科技有限公司</div>
+              <div class="period">2022.11 — 2025.02</div>
+            </div>
+            <div class="position">Web 前端开发工程师</div>
+          </div>
+
+          <div class="subproj">
+            <div class="subproj-title">ChatAI 多端 AI 对话产品（C 端）</div>
+            <div class="subproj-tech">uni-app · Vue3 · SSE</div>
+            <ul class="bullets">
+              <li>
+                负责 H5 / 小程序 / App 多端 AI
+                对话核心页：流式输出接入与展示，按端处理收流差异（如 H5
+                与小程序分块流），将增量文本拼接到会话消息并更新界面。
+              </li>
+              <li>
+                完成会话侧基础能力：消息列表展示、历史会话切换与分页加载，以及发送中状态与异常提示。
+              </li>
+              <li>
+                完成多端登录（微信小程序 / App
+                一键登录），统一登录态后请求对话与业务接口。
+              </li>
+              <li>
+                负责微信支付 / 支付宝的前端调起与支付结果处理（签名等由服务端完成）。
+              </li>
+            </ul>
+          </div>
+
+          <div class="subproj">
+            <div class="subproj-title">ToB 管理后台（PRM / KMS / CMS）</div>
+            <div class="subproj-tech">
+              Vue2 · Vuex · Element-UI · ECharts（基于若依二次开发）
+            </div>
+            <ul class="bullets">
+              <li>
+                负责授权分销后台（PRM）：代理商、客户、订单、激活码 / 库存等页面，基于
+                ECharts 搭建运营看板，并按角色菜单做权限控制。
+              </li>
+              <li>
+                参与控制台（KMS）与运营后台（CMS）：设备运维、应用分发与相关权限配置。
+              </li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <span class="en">Projects</span>
+          <div class="sec-title-bar"><h2>个人项目</h2></div>
+        </div>
+
+        <article class="project">
+          <div class="project-name">个人前端技术平台</div>
+          <div class="project-name-en">Personal AI Knowledge Platform</div>
+          <div class="project-desc">
+            作品集 · 知识库助手 · 2026 — 至今 · 补充 React / Next.js 独立项目实践
+          </div>
+          <div class="project-tech">
+            Next.js 15 · React 19 · TypeScript · Tailwind CSS · SQLite · Vitest · Zod ·
+            JWT · Docker · GitHub Actions
+          </div>
+          <div class="project-link">项目地址：https://yywtaylor.cyou（已上线）</div>
+          <ul class="bullets">
+            <li>
+              独立开发并上线：基于 Markdown 知识库的 AI 助手，为轻量混合检索（全文 /
+              关键词 + 轻量向量）+ SSE
+              流式输出；可配置接入大模型，无密钥时本地模式仍可演示。
+            </li>
+            <li>
+              含 JWT 私有管理面板（笔记 / 链接）；公开知识库基于 Markdown 渲染；使用 App
+              Router 拆分服务端与客户端组件，SQLite 仅服务端直连。
+            </li>
+            <li>
+              工程链路：ESLint / Prettier / Husky、Docker、GitHub Actions
+              自动部署；Lighthouse 检测（首页）：性能 95、无障碍 96、最佳实践 96、SEO
+              100。
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <div class="sec-head">
+          <span class="en">Education</span>
+          <div class="sec-title-bar"><h2>教育背景</h2></div>
+        </div>
+        <div class="edu">
+          <div class="edu-top">
+            <div class="edu-school">金陵科技学院</div>
+            <div class="period">2018.09 — 2022.06</div>
+          </div>
+          <div class="edu-meta">计算机科学与技术 · 本科</div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

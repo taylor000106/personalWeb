@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { ProjectItem } from "@/content/projects";
 import { getProjectTitles } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
+import { localizePeriod } from "@/i18n/localizePeriod";
 
 export function ProjectsSectionClient({
   items,
@@ -46,7 +47,9 @@ export function ProjectsSectionClient({
                     <span className="font-display text-xs text-zinc-500">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <p className="text-xs text-zinc-500">{project.period}</p>
+                    <p className="text-xs text-zinc-500">
+                      {localizePeriod(project.period, locale)}
+                    </p>
                     {project.live ? (
                       <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300">
                         {t.projects.liveBadge}

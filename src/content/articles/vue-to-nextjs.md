@@ -1,13 +1,13 @@
 # 从 Vue 到 Next.js：我的前端技术迁移实践
 
-过去几年我的主交付栈是 **Vue**：企微 SCRM（Vue3 + TypeScript）、ChatAI（uni-app / Vue）以及更早的 Vue2 后台。跳槽作品集却用 **Next.js** 来建站——这不是「抛弃 Vue」，而是一次有目的的技术迁移。
+过去几年我的主交付栈是 **Vue**：企微 SCRM（Web 以 JavaScript 为主、企微 App 用 TypeScript）、ChatAI（uni-app / Vue3）以及更早的 Vue2 后台。跳槽作品集却用 **Next.js** 来建站——这不是「抛弃 Vue」，而是一次有目的的技术迁移。
 
 ## 为什么业务里长期用 Vue
 
 ToB SaaS 与多端产品里，Vue 生态足够成熟：
 
 - 后台：Element Plus / 表格表单 / 权限路由，交付快
-- 多端：uni-app 一套业务覆盖小程序、App、H5、PC
+- 多端：uni-app 一套业务覆盖 H5、小程序、App
 - 团队协作：Pinia、约定式目录、与后端联调路径清晰
 
 这些经验仍然是我的主战场能力：**复杂表单、任务配置、虚拟列表、流式对话 UI**。

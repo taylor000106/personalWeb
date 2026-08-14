@@ -156,15 +156,13 @@ export function ChatAIDiagram() {
   return (
     <DiagramShell title="Multi-end flow · shared core">
       <Node
-        box={{ x: 24, y: 24, w: 120, h: 40, label: "Mini Program" }}
+        box={{ x: 80, y: 24, w: 140, h: 40, label: "Mini Program" }}
         accent="#0e7490"
       />
-      <Node box={{ x: 168, y: 24, w: 100, h: 40, label: "App" }} accent="#0e7490" />
-      <Node box={{ x: 292, y: 24, w: 100, h: 40, label: "H5" }} accent="#0e7490" />
-      <Node box={{ x: 416, y: 24, w: 100, h: 40, label: "PC" }} accent="#0e7490" />
-      <Node box={{ x: 540, y: 24, w: 76, h: 40, label: "Electron" }} accent="#0e7490" />
+      <Node box={{ x: 250, y: 24, w: 120, h: 40, label: "App" }} accent="#0e7490" />
+      <Node box={{ x: 400, y: 24, w: 120, h: 40, label: "H5" }} accent="#0e7490" />
 
-      {[84, 218, 342, 466, 578].map((x) => (
+      {[150, 310, 460].map((x) => (
         <Arrow key={x} x1={x} y1={64} x2={320} y2={100} />
       ))}
 
@@ -174,7 +172,7 @@ export function ChatAIDiagram() {
           y: 100,
           w: 320,
           h: 56,
-          label: "uni-app / Vue business layer",
+          label: "uni-app / Vue3 business layer",
           sub: "Chat session · message list · send/stop",
         }}
         accent="#14b8a6"
@@ -190,8 +188,8 @@ export function ChatAIDiagram() {
           y: 196,
           w: 180,
           h: 52,
-          label: "SSE / WebSocket",
-          sub: "stream · reconnect",
+          label: "SSE stream",
+          sub: "per-end chunk handling",
         }}
         accent="#06b6d4"
       />
@@ -202,7 +200,7 @@ export function ChatAIDiagram() {
           w: 160,
           h: 52,
           label: "Auth adapter",
-          sub: "per-end login",
+          sub: "WX / App login",
         }}
         accent="#6366f1"
       />
@@ -213,7 +211,7 @@ export function ChatAIDiagram() {
           w: 180,
           h: 52,
           label: "Payment adapter",
-          sub: "WX / Alipay / Apple",
+          sub: "WX / Alipay",
         }}
         accent="#8b5cf6"
       />
@@ -236,7 +234,7 @@ export function WeComScrMDiagram() {
           w: 220,
           h: 48,
           label: "PC Ops Console",
-          sub: "Element Plus · tables · forms",
+          sub: "Vue3 · JavaScript · Element Plus",
         }}
         accent="#5b21b6"
       />
@@ -246,8 +244,8 @@ export function WeComScrMDiagram() {
           y: 20,
           w: 220,
           h: 48,
-          label: "WeChat H5",
-          sub: "Vant · campaign flows",
+          label: "WeCom App",
+          sub: "Vue3 · TypeScript",
         }}
         accent="#7c3aed"
       />
@@ -261,8 +259,8 @@ export function WeComScrMDiagram() {
           y: 108,
           w: 320,
           h: 52,
-          label: "Vue3 + TypeScript app shell",
-          sub: "Pinia · request layer · shared types",
+          label: "Shared Vue3 capabilities",
+          sub: "Pinia · request · cycle task kit",
         }}
         accent="#8b5cf6"
       />

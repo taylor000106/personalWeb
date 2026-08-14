@@ -40,14 +40,16 @@ export function HeroSection() {
           >
             {isZh ? profile.roleZh : profile.roleEn}
           </motion.p>
-          <motion.p
-            initial={{ y: 16, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.55, delay: 0.12 }}
-            className="mt-1 text-sm tracking-wide text-violet-300/90"
-          >
-            {isZh ? profile.roleEn : profile.roleZh}
-          </motion.p>
+          {!isZh ? (
+            <motion.p
+              initial={{ y: 16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.55, delay: 0.12 }}
+              className="mt-1 text-sm tracking-wide text-violet-300/90"
+            >
+              {profile.roleZh}
+            </motion.p>
+          ) : null}
 
           <motion.p
             initial={{ y: 16, opacity: 0 }}
@@ -57,16 +59,6 @@ export function HeroSection() {
           >
             {isZh ? profile.taglineZh : profile.taglineEn}
           </motion.p>
-          {isZh ? (
-            <motion.p
-              initial={{ y: 12, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.22 }}
-              className="mt-2 max-w-xl text-sm text-zinc-500"
-            >
-              {profile.taglineEn}
-            </motion.p>
-          ) : null}
 
           <motion.ul
             initial={{ y: 16, opacity: 0 }}

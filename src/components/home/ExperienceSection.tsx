@@ -2,6 +2,7 @@
 
 import { experienceOverview, timeline } from "@/content/timeline";
 import { useI18n } from "@/i18n/LanguageProvider";
+import { localizePeriod } from "@/i18n/localizePeriod";
 
 export function ExperienceSection() {
   const { t, locale } = useI18n();
@@ -17,7 +18,7 @@ export function ExperienceSection() {
 
       <div className="mt-8 text-center">
         <p className="font-display text-sm text-violet-300/90">
-          {experienceOverview.period}
+          {localizePeriod(experienceOverview.period, locale)}
         </p>
         <p className="mt-1 text-zinc-300">
           {locale === "zh" ? "前端工程师" : experienceOverview.role}

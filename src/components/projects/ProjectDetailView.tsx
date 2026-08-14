@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { ProjectItem, ProjectMedia } from "@/content/projects";
 import { getProjectTitles } from "@/content/projects";
 import { useI18n } from "@/i18n/LanguageProvider";
+import { localizePeriod } from "@/i18n/localizePeriod";
 import {
   hasArchitectureDiagram,
   ProjectArchitectureDiagram,
@@ -119,10 +120,12 @@ export function ProjectDetailView({
 
       <header className="mt-8">
         <div className="flex flex-wrap items-center gap-3">
-          <p className="text-xs text-zinc-500">{project.period}</p>
+          <p className="text-xs text-zinc-500">
+            {localizePeriod(project.period, locale)}
+          </p>
           {project.live ? (
-            <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300 uppercase">
-              Live
+            <span className="border border-emerald-500/40 bg-emerald-500/10 px-2 py-0.5 text-[10px] tracking-wide text-emerald-300">
+              {t.projects.liveBadge}
             </span>
           ) : null}
         </div>

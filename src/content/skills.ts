@@ -12,6 +12,7 @@ export const skillGroups: SkillGroup[] = [
       "Vue2",
       "React",
       "Next.js",
+      "JavaScript",
       "TypeScript",
       "uni-app",
       "Element Plus",
@@ -27,7 +28,6 @@ export const skillGroups: SkillGroup[] = [
       "CI/CD",
       "Docker",
       "Vite",
-      "Electron",
       "多端发版",
       "组件封装",
       "开发规范",
@@ -35,6 +35,6 @@ export const skillGroups: SkillGroup[] = [
   },
   {
     category: "AI",
-    items: ["SSE", "WebSocket", "LLM API", "流式对话", "AI 辅助研发流程"],
+    items: ["SSE", "LLM API", "流式对话", "多端收流差异处理"],
   },
 ];

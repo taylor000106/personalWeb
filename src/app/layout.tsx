@@ -21,11 +21,11 @@ const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Taylor";
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteName} · Frontend Engineer`,
+    default: `${siteName} · 前端开发工程师`,
     template: `%s · ${siteName}`,
   },
   description:
-    "AI-powered Frontend Developer Portfolio & Knowledge Platform — Vue / React / Next.js · Lab · AI Assistant",
+    "前端开发工程师作品集与知识平台 — Vue / React / Next.js · 实验室 · AI 助手",
 };
 
 export default function RootLayout({

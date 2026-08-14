@@ -23,16 +23,16 @@ export const timeline: TimelineNode[] = [
     year: "2024",
     title: "AI Application",
     titleZh: "AI 应用",
-    keywords: ["SSE", "WebSocket", "uni-app", "Payment", "Multi-platform"],
-    note: "同司 ChatAI 多端：流式对话、登录支付与多端发布。",
+    keywords: ["SSE", "uni-app", "Payment", "Multi-platform"],
+    note: "同司 ChatAI：H5 / 小程序 / App 流式对话、登录与支付调起。",
   },
   {
     id: "2025",
     year: "2025",
     title: "SaaS Delivery",
     titleZh: "SaaS 业务交付",
-    keywords: ["Vue3", "TypeScript", "SaaS", "企微", "复杂表单"],
-    note: "百珏企微 SCRM：运营后台与 H5 活动模块，复杂业务与工程规范落地。",
+    keywords: ["Vue3", "JavaScript", "TypeScript", "企微", "复杂表单"],
+    note: "百珏企微 SCRM（Web JS / App TS）与银行营销 H5 模板化交付。",
   },
   {
     id: "present",
@@ -46,6 +46,6 @@ export const timeline: TimelineNode[] = [
 ];
 
 export const experienceOverview = {
-  period: "2022 — Present",
+  period: "2022 — 至今",
   role: "Frontend Engineer",
 } as const;
