@@ -704,6 +704,44 @@ export const labEffects: LabEffect[] = [
     useCases: ["大数据预处理", "客户端加密 / 压缩", "解释长任务与卡顿成因"],
     techStack: ["Web Worker", "ArrayBuffer", "performance.now"],
   },
+  {
+    slug: "china-3d-map",
+    category: "animation",
+    title: "全国 3D 地图",
+    subtitle: "省级轮廓挤出 · 悬停高亮 · 城际飞线",
+    interactive: true,
+    tags: ["Three.js", "GeoJSON", "Dataviz"],
+    demoPath: "/lab/demos/china-3d-map.html",
+    previewBg: "#050814",
+    source: {
+      name: "knight-L / sc-datav（思路参考）",
+      url: "https://github.com/knight-L/sc-datav",
+    },
+    publishedAt: "2026-08-14",
+    summary:
+      "把中国省级 GeoJSON 挤出成 Three.js 三维地图：轨道旋转、省份悬停高亮、主要城市之间的飞线粒子。适合作为数据大屏方向的 Lab 起步版。",
+    techPoints: [
+      "GeoJSON Polygon / MultiPolygon → ExtrudeGeometry",
+      "经纬度简易投影与挤出高度",
+      "Raycaster 省份拾取与飞线动画",
+    ],
+    analysis: [
+      {
+        heading: "从 2D 边界到 3D 地图",
+        body: "读取省级 FeatureCollection，将每个 ring 建成 Shape 再 Extrude；旋转到 XZ 平面后形成「地图地形」。全国数据比单省更密，边界可后续再做简化降面数。",
+      },
+      {
+        heading: "交互与飞线",
+        body: "Raycaster 做悬停高亮；城际飞线用二次贝塞尔曲线 + 沿曲线运动的点，模拟跨区域流向——先假数据，后续可接真实业务指标。",
+      },
+      {
+        heading: "和 sc-datav 的关系",
+        body: "灵感来自 sc-datav 的 3D 大屏路线（Three.js + 地理轮廓），本 Demo 改为全国省级，并做成可嵌入 Lab 的单页体验，未整仓引入其依赖。",
+      },
+    ],
+    useCases: ["作品集展示数据可视化兴趣", "讲解 GeoJSON → 3D 管线", "后续扩展省下钻 / 真实指标大屏"],
+    techStack: ["Three.js", "GeoJSON", "OrbitControls", "Raycaster"],
+  },
 ];
 
 export function getLabEffect(slug: string) {
